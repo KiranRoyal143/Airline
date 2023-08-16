@@ -9,6 +9,18 @@
   width: 100%;
   height: auto;
 }
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+.logo-image {
+  width: 40px;
+  height: auto;
+  margin-right: 10px;
+}
 .header-brand {
   height: auto;
   color: white;
