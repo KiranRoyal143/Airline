@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-const PassengerDetails = ({ passenger, onChangeSeat, onAddAncillaryService, onChangeMealPreference, onAddInFlightShopRequest }) => {
+const PassengerDetails = ({
+  passenger,
+  onChangeSeat,
+  onAddAncillaryService,
+  onChangeMealPreference,
+  onAddInFlightShopRequest,
+}) => {
   const [newSeat, setNewSeat] = useState("");
   const [newMealPreference, setNewMealPreference] = useState("");
   const [newInFlightShopItem, setNewInFlightShopItem] = useState("");
@@ -34,7 +40,8 @@ const PassengerDetails = ({ passenger, onChangeSeat, onAddAncillaryService, onCh
         <strong>Name:</strong> {passenger.name}
       </p>
       <p>
-        <strong>Ancillary Services:</strong> {passenger.ancillaryServices.join(", ")}
+        <strong>Ancillary Services:</strong>{" "}
+        {passenger.ancillaryServices.join(", ")}
       </p>
       <p>
         <strong>Seat Number:</strong> {passenger.seatNumber}
@@ -56,7 +63,9 @@ const PassengerDetails = ({ passenger, onChangeSeat, onAddAncillaryService, onCh
           onChange={(e) => setNewMealPreference(e.target.value)}
           placeholder="Enter new meal preference"
         />
-        <button onClick={handleMealPreferenceChange}>Change Meal Preference</button>
+        <button onClick={handleMealPreferenceChange}>
+          Change Meal Preference
+        </button>
         <div>
           <input
             type="text"
@@ -64,7 +73,9 @@ const PassengerDetails = ({ passenger, onChangeSeat, onAddAncillaryService, onCh
             onChange={(e) => setNewInFlightShopItem(e.target.value)}
             placeholder="Enter in-flight shop request"
           />
-          <button onClick={handleAddInFlightShopRequest}>Add In-Flight Shop Request</button>
+          <button onClick={handleAddInFlightShopRequest}>
+            Add In-Flight Shop Request
+          </button>
         </div>
       </div>
     </div>
@@ -72,4 +83,3 @@ const PassengerDetails = ({ passenger, onChangeSeat, onAddAncillaryService, onCh
 };
 
 export default PassengerDetails;
-

@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchFlights } from "../store/actions/flightsActions";
+// CheckIn.js
+import React, { useState } from "react";
 import FlightList from "./FlightList";
 import SeatMap from "./SeatMap";
 import PassengerList from "./PassengerList";
 import PassengerDetails from "./PassengerDetails";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updatePassengerCheckIn,
+  undoPassengerCheckIn,
+} from "../store/actions/flightsActions";
 
-const CheckIn = () => {
+const CheckIn = ({ onSelectFlight, selectedFlight }) => {
+  const dispatch = useDispatch();
   const flights = useSelector((state) => state.flights.flights);
-  const [selectedFlight, setSelectedFlight] = useState(null);
-  const dispatch = useDispatch(); // Get the dispatch function
-
-  const handleSelectFlight = (flight) => {
-    setSelectedFlight(flight);
-  };
 
   const handleSeatSelect = (selectedPassenger) => {
     // Implement your logic here to update passenger details
@@ -23,16 +22,24 @@ const CheckIn = () => {
     // Implement your logic here to change passenger seat
   };
 
-  useEffect(() => {
-    dispatch(fetchFlights()); // Use the imported action
-  }, [dispatch]);
+  const handleCheckIn = (passenger) => {
+    dispatch(updatePassengerCheckIn(passenger.flightId, passenger.id));
+  };
+
+  const handleUndoCheckIn = (passenger) => {
+    dispatch(undoPassengerCheckIn(passenger.flightId, passenger.id));
+  };
 
   return (
     <div>
       <h1>Airline Staff Check-In</h1>
-      {!selectedFlight ? (
-        <FlightList flights={flights} onSelectFlight={handleSelectFlight} />
+      {flights.length > 0 ? (
+        <FlightList flights={flights} onSelectFlight={onSelectFlight} />
       ) : (
+        <p>Loading flights...</p>
+      )}
+
+      {selectedFlight && (
         <div>
           <h2>Selected Flight: {selectedFlight.flightNumber}</h2>
           {/* Display other flight details here */}
@@ -41,10 +48,13 @@ const CheckIn = () => {
             onSeatSelect={handleSeatSelect}
           />
           <PassengerList passengers={selectedFlight.passengers} />
+
           {selectedFlight.passengers.map((passenger) => (
             <PassengerDetails
               key={passenger.id}
               passenger={passenger}
+              onCheckIn={handleCheckIn}
+              onUndoCheckIn={handleUndoCheckIn}
               onChangeSeat={handleChangeSeat}
             />
           ))}

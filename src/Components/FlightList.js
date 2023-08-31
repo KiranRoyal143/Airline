@@ -1,24 +1,11 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchFlightsRequest } from "../store/actions/flightsActions";
+import React from "react";
+import { useSelector } from "react-redux";
 
-const FlightList = () => {
+const FlightList = ({ onSelectFlight }) => {
   const flights = useSelector((state) => state.flights.flights);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchFlightsRequest());
-    // Simulate API call (replace with actual API call)
-    setTimeout(() => {
-      const dummyFlights = [
-        // Your flight data here
-      ];
-      dispatch(fetchFlightsRequest(dummyFlights));
-    }, 5000);
-  }, [dispatch]);
 
   const handleSelectFlight = (flight) => {
-    // You can dispatch an action here if needed
+    onSelectFlight(flight);
   };
 
   return (

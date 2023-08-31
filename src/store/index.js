@@ -1,7 +1,9 @@
 // src/store/index.js
-import { createStore } from "redux";
-import rootReducer from "../store/reducers";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk"; // Import Redux Thunk
+import rootReducer from "./store/reducers";
 
-const store = createStore(rootReducer);
+// Create the Redux store with the rootReducer and Redux Thunk middleware
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default store;

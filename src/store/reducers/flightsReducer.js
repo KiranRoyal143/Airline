@@ -3,6 +3,9 @@
 import {
   FETCH_FLIGHTS_SUCCESS,
   FETCH_FLIGHTS_FAILURE,
+  ADD_ANCILLARY_SERVICE,
+  DELETE_ANCILLARY_SERVICE,
+  UPDATE_PASSENGER_DETAILS,
 } from "../actions/flightsActions";
 
 const initialState = {
@@ -41,6 +44,37 @@ const initialState = {
   error: null,
 };
 
+const addAncillaryServiceReducer = (state, payload) => {
+  const { flight, service } = payload;
+  const updatedFlights = state.flights.map((f) =>
+    f.id === flight.id
+      ? {
+          ...f,
+          passengers: f.passengers.map((p) =>
+            p.id === flight.id
+              ? { ...p, ancillaryServices: [...p.ancillaryServices, service] }
+              : p
+          ),
+        }
+      : f
+  );
+
+  return {
+    ...state,
+    flights: updatedFlights,
+  };
+};
+
+const deleteAncillaryServiceReducer = (state, payload) => {
+  // Implement the logic to delete an ancillary service from a flight
+  // Return the updated state
+};
+
+const updatePassengerDetailsReducer = (state, payload) => {
+  // Implement the logic to update passenger details
+  // Return the updated state
+};
+
 const flightsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_FLIGHTS_SUCCESS:
@@ -55,6 +89,12 @@ const flightsReducer = (state = initialState, action) => {
         flights: [],
         error: action.payload,
       };
+    case ADD_ANCILLARY_SERVICE:
+      return addAncillaryServiceReducer(state, action.payload);
+    case DELETE_ANCILLARY_SERVICE:
+      return deleteAncillaryServiceReducer(state, action.payload);
+    case UPDATE_PASSENGER_DETAILS:
+      return updatePassengerDetailsReducer(state, action.payload);
     default:
       return state;
   }
