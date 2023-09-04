@@ -1,43 +1,82 @@
-// CheckIn.js
-import React, { useState } from "react";
-import FlightList from "./FlightList";
+import React, { useState, useEffect } from "react";
 import SeatMap from "./SeatMap";
 import PassengerList from "./PassengerList";
 import PassengerDetails from "./PassengerDetails";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   updatePassengerCheckIn,
   undoPassengerCheckIn,
+  changePassengerSeat,
 } from "../store/actions/flightsActions";
 
-const CheckIn = ({ onSelectFlight, selectedFlight }) => {
+const CheckIn = ({ selectedFlight, onBack }) => {
   const dispatch = useDispatch();
-  const flights = useSelector((state) => state.flights.flights);
+  const [filteredPassengers, setFilteredPassengers] = useState([]);
 
-  const handleSeatSelect = (selectedPassenger) => {
-    // Implement your logic here to update passenger details
+  const filterPassengers = (filterCriteria) => {
+    if (!selectedFlight) return;
+
+    let filtered = selectedFlight.passengers;
+
+    if (filterCriteria === "checkedIn") {
+      filtered = selectedFlight.passengers.filter(
+        (passenger) => passenger.isCheckedIn
+      );
+    } else if (filterCriteria === "notCheckedIn") {
+      filtered = selectedFlight.passengers.filter(
+        (passenger) => !passenger.isCheckedIn
+      );
+    } else if (filterCriteria === "wheelchair") {
+      filtered = selectedFlight.passengers.filter(
+        (passenger) => passenger.requiresWheelchair
+      );
+    } else if (filterCriteria === "infant") {
+      filtered = selectedFlight.passengers.filter(
+        (passenger) => passenger.hasInfant
+      );
+    }
+
+    setFilteredPassengers(filtered);
   };
 
+  const handleSeatSelect = (passenger, selectSeat) => {
+    // Implement your logic here to select a seat
+    dispatch(changePassengerSeat(passenger.flightId, passenger.id, selectSeat));
+  };
   const handleChangeSeat = (passenger, newSeat) => {
     // Implement your logic here to change passenger seat
+    dispatch(changePassengerSeat(passenger.flightId, passenger.id, newSeat));
   };
 
   const handleCheckIn = (passenger) => {
-    dispatch(updatePassengerCheckIn(passenger.flightId, passenger.id));
+    // Filter passengers who are already checked-in
+    const updatedPassengers = selectedFlight.passengers.map((p) =>
+      p.id === passenger.id ? { ...p, isCheckedIn: true } : p
+    );
+
+    // Update the selected flight's passenger list with the updated passengers
+    const updatedFlight = { ...selectedFlight, passengers: updatedPassengers };
+
+    // Dispatch the action to update the passenger's check-in status
+    dispatch(updatePassengerCheckIn(updatedFlight));
   };
 
   const handleUndoCheckIn = (passenger) => {
-    dispatch(undoPassengerCheckIn(passenger.flightId, passenger.id));
+    // Filter passengers who are not checked-in
+    const updatedPassengers = selectedFlight.passengers.map((p) =>
+      p.id === passenger.id ? { ...p, isCheckedIn: false } : p
+    );
+
+    // Update the selected flight's passenger list with the updated passengers
+    const updatedFlight = { ...selectedFlight, passengers: updatedPassengers };
+
+    // Dispatch the action to undo the passenger's check-in status
+    dispatch(undoPassengerCheckIn(updatedFlight));
   };
 
   return (
     <div>
       <h1>Airline Staff Check-In</h1>
-      {flights.length > 0 ? (
-        <FlightList flights={flights} onSelectFlight={onSelectFlight} />
-      ) : (
-        <p>Loading flights...</p>
-      )}
 
       {selectedFlight && (
         <div>
@@ -47,7 +86,12 @@ const CheckIn = ({ onSelectFlight, selectedFlight }) => {
             passengers={selectedFlight.passengers}
             onSeatSelect={handleSeatSelect}
           />
-          <PassengerList passengers={selectedFlight.passengers} />
+          <PassengerList
+            passengers={selectedFlight.passengers}
+            onCheckIn={handleCheckIn}
+            onUndoCheckIn={handleUndoCheckIn}
+            onChangeSeat={handleChangeSeat}
+          />
 
           {selectedFlight.passengers.map((passenger) => (
             <PassengerDetails
@@ -58,8 +102,22 @@ const CheckIn = ({ onSelectFlight, selectedFlight }) => {
               onChangeSeat={handleChangeSeat}
             />
           ))}
+          <h3>Passenger Filters</h3>
+          <button onClick={() => filterPassengers("checkedIn")}>
+            Checked-In
+          </button>
+          <button onClick={() => filterPassengers("notCheckedIn")}>
+            Not Checked-In
+          </button>
+          <button onClick={() => filterPassengers("wheelchair")}>
+            Wheelchair
+          </button>
+          <button onClick={() => filterPassengers("infant")}>Infant</button>
         </div>
       )}
+      <div>
+        <button onClick={onBack}>Back</button>
+      </div>
     </div>
   );
 };
