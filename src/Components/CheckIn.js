@@ -71,7 +71,7 @@ const CheckIn = ({ selectedFlight, onBack }) => {
     const updatedFlight = { ...selectedFlight, passengers: updatedPassengers };
 
     // Dispatch the action to undo the passenger's check-in status
-    dispatch(undoPassengerCheckIn(updatedFlight));
+    dispatch(undoPassengerCheckIn(updatedFlight)); // Dispatch the action with the updatedFlight object
   };
 
   return (

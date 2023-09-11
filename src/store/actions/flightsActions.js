@@ -1,4 +1,5 @@
 // flightsActions.js
+
 export const FETCH_FLIGHTS_REQUEST = "FETCH_FLIGHTS_REQUEST";
 export const FETCH_FLIGHTS_SUCCESS = "FETCH_FLIGHTS_SUCCESS";
 export const FETCH_FLIGHTS_FAILURE = "FETCH_FLIGHTS_FAILURE";
@@ -19,6 +20,7 @@ export const changePassengerSeat = (flightId, passengerId, newSeat) => {
     payload: { flightId, passengerId, newSeat },
   };
 };
+
 // Action creators
 export const fetchFlightsRequest = () => {
   return {
@@ -39,12 +41,14 @@ export const fetchFlightsFailure = (error) => {
     payload: error,
   };
 };
+
 export const addInFlightShopRequest = (flightId, passengerId, newItem) => {
   return {
     type: ADD_IN_FLIGHT_SHOP_REQUEST,
     payload: { flightId, passengerId, newItem },
   };
 };
+
 export const changeMealPreference = (
   flightId,
   passengerId,
@@ -55,6 +59,7 @@ export const changeMealPreference = (
     payload: { flightId, passengerId, newMealPreference },
   };
 };
+
 // Async action creator
 export const fetchFlights = () => {
   return (dispatch) => {
@@ -92,13 +97,23 @@ export const deleteAncillaryService = (flight, service) => {
     });
   };
 };
+
+// Action creator to update passenger check-in status
 export const updatePassengerCheckIn = (flightId, passengerId) => {
-  // Your logic to update passenger check-in status
+  return {
+    type: UPDATE_PASSENGER_CHECK_IN,
+    payload: { flightId, passengerId },
+  };
 };
 
+// Action creator to undo passenger check-in status
 export const undoPassengerCheckIn = (flightId, passengerId) => {
-  // Your logic to undo passenger check-in status
+  return {
+    type: UNDO_PASSENGER_CHECK_IN,
+    payload: { flightId, passengerId },
+  };
 };
+
 export const updatePassengerDetails = (flight, updatedPassenger) => {
   return (dispatch) => {
     // Implement the logic to update passenger details

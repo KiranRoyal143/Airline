@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const PassengerDetails = ({
   passenger,
-  onChangeSeat,
+  onChangeSeat, // Correct the prop name
   onAddAncillaryService,
   onChangeMealPreference,
   onAddInFlightShopRequest,
@@ -12,7 +12,7 @@ const PassengerDetails = ({
   const [newInFlightShopItem, setNewInFlightShopItem] = useState("");
 
   const handleSeatChange = () => {
-    onChangeSeat(passenger, newSeat);
+    onChangeSeat(passenger, newSeat); // Correct the function call
     setNewSeat("");
   };
 
@@ -32,7 +32,6 @@ const PassengerDetails = ({
     onAddInFlightShopRequest(passenger, newInFlightShopItem);
     setNewInFlightShopItem(""); // Reset the input field after adding the request
   };
-
   return (
     <div>
       <h2>Passenger Details</h2>
@@ -53,7 +52,9 @@ const PassengerDetails = ({
           value={newSeat}
           onChange={(e) => setNewSeat(e.target.value)}
         />
-        <button onClick={handleSeatChange}>Change Seat</button>
+        <button onClick={() => onChangeSeat(passenger, newSeat)}>
+          Change Seat
+        </button>
       </div>
       <button onClick={handleAddAncillaryService}>Add Ancillary Service</button>
       <div>

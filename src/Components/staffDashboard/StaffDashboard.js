@@ -5,62 +5,58 @@ import InFlightManagement from "../InFlightManagement";
 
 function StaffDashboard() {
   const [selectedFlight, setSelectedFlight] = useState(null);
-  const [page, setPage] = useState("selectFlight");
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const handleSelectFlight = (flight) => {
     setSelectedFlight(flight);
-    setPage("selectTask");
   };
 
   const handleCheckIn = () => {
-    setPage("checkIn");
+    setSelectedTask("checkIn");
   };
 
   const handleInFlight = () => {
-    setPage("inFlight");
+    setSelectedTask("inFlight");
   };
 
   const handleBackToTaskSelection = () => {
-    setPage("selectTask");
+    setSelectedTask(null);
   };
+
   const handleBackToFlightSelection = () => {
     setSelectedFlight(null);
-    setPage("selectFlight");
   };
-
   return (
     <div>
-      {page === "selectFlight" && (
-        <div>
-          <h1>Staff Dashboard</h1>
-          <FlightList onSelectFlight={handleSelectFlight} />
-        </div>
-      )}
-
-      {page === "selectTask" && (
+      {selectedTask === null && (
         <div>
           <h1>Select a Task</h1>
           <button onClick={handleCheckIn}>Check-In</button>
           <button onClick={handleInFlight}>In-Flight Management</button>
-          {selectedFlight && (
-            <button onClick={handleBackToFlightSelection}>
-              Back to Flight Selection
-            </button>
-          )}
         </div>
       )}
 
-      {page === "checkIn" && selectedFlight && (
+      {selectedTask !== null && selectedFlight === null && (
+        <div>
+          <h1>Select a Flight</h1>
+          <FlightList onSelectFlight={handleSelectFlight} />
+          <button onClick={handleBackToTaskSelection}>
+            Back to Task Selection
+          </button>
+        </div>
+      )}
+
+      {selectedTask === "checkIn" && selectedFlight && (
         <CheckIn
           selectedFlight={selectedFlight}
-          onBack={handleBackToTaskSelection}
+          onBack={handleBackToFlightSelection}
         />
       )}
 
-      {page === "inFlight" && selectedFlight && (
+      {selectedTask === "inFlight" && selectedFlight && (
         <InFlightManagement
           selectedFlight={selectedFlight}
-          onBack={handleBackToTaskSelection}
+          onBack={handleBackToFlightSelection}
         />
       )}
     </div>

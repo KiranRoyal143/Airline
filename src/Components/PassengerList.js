@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 
-const PassengerList = ({ passengers, onUpdatePassenger }) => {
+const PassengerList = ({
+  passengers,
+  onCheckIn,
+  onUndoCheckIn,
+  onChangeSeat,
+  onFilter,
+  onUpdatePassenger,
+}) => {
   const [filter, setFilter] = useState("all");
   const [showMissingPassport, setShowMissingPassport] = useState(false);
   const [showMissingAddress, setShowMissingAddress] = useState(false);
   const [showMissingDOB, setShowMissingDOB] = useState(false);
-  const [selectedPassenger, setSelectedPassenger] = useState(null);
+  const [selectedPassenger, setSelectedPassenger] = useState(null); // Initialize to null
   const [newName, setNewName] = useState("");
   const [newPassport, setNewPassport] = useState("");
   const [newAddress, setNewAddress] = useState("");
@@ -14,8 +21,10 @@ const PassengerList = ({ passengers, onUpdatePassenger }) => {
     const isCheckInFiltered =
       filter === "all" || (filter === "checkedIn" && passenger.isCheckedIn);
     const isWheelchairFiltered =
-      filter === "all" || (filter === "wheelchair" && passenger.requiresWheelchair);
-    const isInfantFiltered = filter === "all" || (filter === "infant" && passenger.hasInfant);
+      filter === "all" ||
+      (filter === "wheelchair" && passenger.requiresWheelchair);
+    const isInfantFiltered =
+      filter === "all" || (filter === "infant" && passenger.hasInfant);
 
     const isPassportFiltered = !showMissingPassport || passenger.passport;
     const isAddressFiltered = !showMissingAddress || passenger.address;
@@ -41,7 +50,7 @@ const PassengerList = ({ passengers, onUpdatePassenger }) => {
       };
 
       onUpdatePassenger(updatedPassenger);
-      setSelectedPassenger(null);
+      setSelectedPassenger(null); // Reset selected passenger
       setNewName("");
       setNewPassport("");
       setNewAddress("");
@@ -56,35 +65,10 @@ const PassengerList = ({ passengers, onUpdatePassenger }) => {
         <select onChange={(e) => setFilter(e.target.value)}>
           <option value="all">All</option>
           <option value="checkedIn">Checked-In</option>
+          <option value="notCheckedIn">Not Checked-In</option>
           <option value="wheelchair">Wheelchair</option>
           <option value="infant">Infant</option>
         </select>
-      </div>
-      <div>
-        <label>
-          Missing Passport:
-          <input
-            type="checkbox"
-            checked={showMissingPassport}
-            onChange={() => setShowMissingPassport(!showMissingPassport)}
-          />
-        </label>
-        <label>
-          Missing Address:
-          <input
-            type="checkbox"
-            checked={showMissingAddress}
-            onChange={() => setShowMissingAddress(!showMissingAddress)}
-          />
-        </label>
-        <label>
-          Missing Date of Birth:
-          <input
-            type="checkbox"
-            checked={showMissingDOB}
-            onChange={() => setShowMissingDOB(!showMissingDOB)}
-          />
-        </label>
       </div>
       <ul>
         {filteredPassengers.map((passenger) => (
@@ -93,35 +77,14 @@ const PassengerList = ({ passengers, onUpdatePassenger }) => {
             <strong>Ancillary Services:</strong>{" "}
             {passenger.ancillaryServices.join(", ")} |{" "}
             <strong>Seat Number:</strong> {passenger.seatNumber} |{" "}
-            <button onClick={() => setSelectedPassenger(passenger)}>Edit</button>
+            <button onClick={() => onChangeSeat(passenger)}>Change Seat</button>{" "}
+            | <button onClick={() => onCheckIn(passenger)}>Check-In</button> |{" "}
+            <button onClick={() => onUndoCheckIn(passenger)}>
+              Undo Check-In
+            </button>
           </li>
         ))}
       </ul>
-      {selectedPassenger && (
-        <div>
-          <h3>Edit Passenger</h3>
-          <input
-            type="text"
-            placeholder="Name"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Passport"
-            value={newPassport}
-            onChange={(e) => setNewPassport(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Address"
-            value={newAddress}
-            onChange={(e) => setNewAddress(e.target.value)}
-          />
-          <button onClick={handleUpdatePassenger}>Update Passenger</button>
-          <button onClick={() => setSelectedPassenger(null)}>Cancel</button>
-        </div>
-      )}
     </div>
   );
 };

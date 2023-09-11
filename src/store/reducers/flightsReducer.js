@@ -4,6 +4,8 @@ import {
   ADD_ANCILLARY_SERVICE,
   DELETE_ANCILLARY_SERVICE,
   UPDATE_PASSENGER_DETAILS,
+  UPDATE_PASSENGER_CHECK_IN,
+  UNDO_PASSENGER_CHECK_IN,
 } from "../actions/flightsActions";
 
 const initialState = {
@@ -133,6 +135,90 @@ const updatePassengerDetailsReducer = (state, payload) => {
   };
 };
 
+// Define your updatePassengerCheckInReducer function
+const updatePassengerCheckInReducer = (state, payload) => {
+  const { flightId, passengerId } = payload;
+
+  // Find the selected flight by flightId
+  const selectedFlight = state.flights.find((flight) => flight.id === flightId);
+
+  if (selectedFlight) {
+    // Find the passenger by passengerId within the selected flight
+    const updatedPassengers = selectedFlight.passengers.map((passenger) => {
+      if (passenger.id === passengerId) {
+        // Update the isCheckedIn property
+        return { ...passenger, isCheckedIn: true };
+      }
+      return passenger;
+    });
+
+    // Update the selected flight with the updated passenger list
+    const updatedFlight = {
+      ...selectedFlight,
+      passengers: updatedPassengers,
+    };
+
+    // Create an updated array of flights
+    const updatedFlights = state.flights.map((flight) => {
+      if (flight.id === flightId) {
+        return updatedFlight;
+      }
+      return flight;
+    });
+
+    // Return the updated state
+    return {
+      ...state,
+      flights: updatedFlights,
+    };
+  }
+
+  // If the selected flight or passenger is not found, return the original state
+  return state;
+};
+
+// Define your undoPassengerCheckInReducer function
+const undoPassengerCheckInReducer = (state, payload) => {
+  const { flightId, passengerId } = payload;
+
+  // Find the selected flight by flightId
+  const selectedFlight = state.flights.find((flight) => flight.id === flightId);
+
+  if (selectedFlight) {
+    // Find the passenger by passengerId within the selected flight
+    const updatedPassengers = selectedFlight.passengers.map((passenger) => {
+      if (passenger.id === passengerId) {
+        // Update the isCheckedIn property
+        return { ...passenger, isCheckedIn: false };
+      }
+      return passenger;
+    });
+
+    // Update the selected flight with the updated passenger list
+    const updatedFlight = {
+      ...selectedFlight,
+      passengers: updatedPassengers,
+    };
+
+    // Create an updated array of flights
+    const updatedFlights = state.flights.map((flight) => {
+      if (flight.id === flightId) {
+        return updatedFlight;
+      }
+      return flight;
+    });
+
+    // Return the updated state
+    return {
+      ...state,
+      flights: updatedFlights,
+    };
+  }
+
+  // If the selected flight or passenger is not found, return the original state
+  return state;
+};
+
 const flightsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_FLIGHTS_SUCCESS:
@@ -153,6 +239,10 @@ const flightsReducer = (state = initialState, action) => {
       return deleteAncillaryServiceReducer(state, action.payload);
     case UPDATE_PASSENGER_DETAILS:
       return updatePassengerDetailsReducer(state, action.payload);
+    case UPDATE_PASSENGER_CHECK_IN:
+      return updatePassengerCheckInReducer(state, action.payload);
+    case UNDO_PASSENGER_CHECK_IN:
+      return undoPassengerCheckInReducer(state, action.payload);
     default:
       return state;
   }
