@@ -1,37 +1,12 @@
 import React, { useState } from "react";
 
-const PassengerDetails = ({
-  passenger,
-  onChangeSeat, // Correct the prop name
-  onAddAncillaryService,
-  onChangeMealPreference,
-  onAddInFlightShopRequest,
-}) => {
+const PassengerDetails = ({ passenger, onChangeSeat }) => {
   const [newSeat, setNewSeat] = useState("");
-  const [newMealPreference, setNewMealPreference] = useState("");
-  const [newInFlightShopItem, setNewInFlightShopItem] = useState("");
-
   const handleSeatChange = () => {
     onChangeSeat(passenger, newSeat); // Correct the function call
     setNewSeat("");
   };
 
-  const handleAddAncillaryService = () => {
-    const newService = prompt("Enter the name of the new ancillary service:");
-    if (newService) {
-      onAddAncillaryService(passenger, newService);
-    }
-  };
-
-  const handleMealPreferenceChange = () => {
-    onChangeMealPreference(passenger, newMealPreference);
-    setNewMealPreference(""); // Reset the input field after changing the preference
-  };
-
-  const handleAddInFlightShopRequest = () => {
-    onAddInFlightShopRequest(passenger, newInFlightShopItem);
-    setNewInFlightShopItem(""); // Reset the input field after adding the request
-  };
   return (
     <div>
       <h2>Passenger Details</h2>
@@ -52,32 +27,7 @@ const PassengerDetails = ({
           value={newSeat}
           onChange={(e) => setNewSeat(e.target.value)}
         />
-        <button onClick={() => onChangeSeat(passenger, newSeat)}>
-          Change Seat
-        </button>
-      </div>
-      <button onClick={handleAddAncillaryService}>Add Ancillary Service</button>
-      <div>
-        <input
-          type="text"
-          value={newMealPreference}
-          onChange={(e) => setNewMealPreference(e.target.value)}
-          placeholder="Enter new meal preference"
-        />
-        <button onClick={handleMealPreferenceChange}>
-          Change Meal Preference
-        </button>
-        <div>
-          <input
-            type="text"
-            value={newInFlightShopItem}
-            onChange={(e) => setNewInFlightShopItem(e.target.value)}
-            placeholder="Enter in-flight shop request"
-          />
-          <button onClick={handleAddInFlightShopRequest}>
-            Add In-Flight Shop Request
-          </button>
-        </div>
+        <button onClick={handleSeatChange}>Change Seat</button>
       </div>
     </div>
   );

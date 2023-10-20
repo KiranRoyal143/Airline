@@ -78,8 +78,6 @@ export const fetchFlights = () => {
 // Async action creator
 export const addAncillaryService = (flight, service) => {
   return (dispatch) => {
-    // Implement the logic to add an ancillary service to a flight
-    // Then dispatch the ADD_ANCILLARY_SERVICE action
     dispatch({
       type: ADD_ANCILLARY_SERVICE,
       payload: { flight, service },
@@ -89,8 +87,6 @@ export const addAncillaryService = (flight, service) => {
 
 export const deleteAncillaryService = (flight, service) => {
   return (dispatch) => {
-    // Implement the logic to delete an ancillary service from a flight
-    // Then dispatch the DELETE_ANCILLARY_SERVICE action
     dispatch({
       type: DELETE_ANCILLARY_SERVICE,
       payload: { flight, service },
@@ -116,8 +112,6 @@ export const undoPassengerCheckIn = (flightId, passengerId) => {
 
 export const updatePassengerDetails = (flight, updatedPassenger) => {
   return (dispatch) => {
-    // Implement the logic to update passenger details
-    // Then dispatch the UPDATE_PASSENGER_DETAILS action
     dispatch({
       type: UPDATE_PASSENGER_DETAILS,
       payload: { flight, updatedPassenger },

@@ -135,8 +135,9 @@ const updatePassengerDetailsReducer = (state, payload) => {
   };
 };
 
-// Define your updatePassengerCheckInReducer function
+// Corrected updatePassengerCheckInReducer function
 const updatePassengerCheckInReducer = (state, payload) => {
+  console.log("Update Passenger Check-In Reducer Called", payload);
   const { flightId, passengerId } = payload;
 
   // Find the selected flight by flightId
@@ -146,7 +147,7 @@ const updatePassengerCheckInReducer = (state, payload) => {
     // Find the passenger by passengerId within the selected flight
     const updatedPassengers = selectedFlight.passengers.map((passenger) => {
       if (passenger.id === passengerId) {
-        // Update the isCheckedIn property
+        // Update the isCheckedIn property for the correct passenger
         return { ...passenger, isCheckedIn: true };
       }
       return passenger;
@@ -166,6 +167,8 @@ const updatePassengerCheckInReducer = (state, payload) => {
       return flight;
     });
 
+    console.log("Updated State in checkInReducer:", updatedFlights);
+
     // Return the updated state
     return {
       ...state,
@@ -177,8 +180,9 @@ const updatePassengerCheckInReducer = (state, payload) => {
   return state;
 };
 
-// Define your undoPassengerCheckInReducer function
+// Corrected undoPassengerCheckInReducer function
 const undoPassengerCheckInReducer = (state, payload) => {
+  console.log("Update Passenger undo Check-In Reducer Called", payload);
   const { flightId, passengerId } = payload;
 
   // Find the selected flight by flightId
@@ -188,7 +192,7 @@ const undoPassengerCheckInReducer = (state, payload) => {
     // Find the passenger by passengerId within the selected flight
     const updatedPassengers = selectedFlight.passengers.map((passenger) => {
       if (passenger.id === passengerId) {
-        // Update the isCheckedIn property
+        // Update the isCheckedIn property for the correct passenger
         return { ...passenger, isCheckedIn: false };
       }
       return passenger;
@@ -208,6 +212,7 @@ const undoPassengerCheckInReducer = (state, payload) => {
       return flight;
     });
 
+    console.log("Updated State in undo checkInReducer:", updatedFlights);
     // Return the updated state
     return {
       ...state,
