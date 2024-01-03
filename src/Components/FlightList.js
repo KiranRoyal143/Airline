@@ -1,17 +1,30 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-const FlightList = ({ flights, onSelectFlight }) => {
+const FlightList = ({ onSelectFlight }) => {
+  const flights = useSelector((state) => state.flights.flights);
+
+  const handleSelectChange = (event) => {
+    const selectedFlightId = event.target.value;
+    const selectedFlight = flights.find(
+      (flight) => flight.id === parseInt(selectedFlightId, 10)
+    );
+    if (selectedFlight) {
+      onSelectFlight(selectedFlight);
+    }
+  };
+
   return (
     <div>
       <h2>Available Flights</h2>
-      <ul>
+      <select onChange={handleSelectChange}>
+        <option value="">Select a flight</option>
         {flights.map((flight) => (
-          <li key={flight.id}>
-            <span>{flight.flightNumber}</span>
-            <button onClick={() => onSelectFlight(flight)}>Select</button>
-          </li>
+          <option key={flight.id} value={flight.id}>
+            {flight.flightNumber},{flight.scheduleTime}
+          </option>
         ))}
-      </ul>
+      </select>
     </div>
   );
 };

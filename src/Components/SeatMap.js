@@ -1,4 +1,3 @@
-// SeatMap.js
 import React from "react";
 
 const SeatMap = ({ passengers, onSeatSelect }) => {
@@ -20,8 +19,10 @@ const SeatMap = ({ passengers, onSeatSelect }) => {
             key={passenger.id}
             className={`seat ${passenger.isCheckedIn ? "checked-in" : ""} ${
               passenger.requiresSpecialMeal ? "special-meal" : ""
+            } ${passenger.requiresWheelchair ? "wheelchair" : ""} ${
+              passenger.hasInfant ? "infant" : ""
             }`}
-            onClick={() => handleSeatClick(passenger)} // Use the handleSeatClick function here
+            onClick={() => handleSeatClick(passenger)}
           >
             {passenger.seatNumber}
           </div>
@@ -32,4 +33,3 @@ const SeatMap = ({ passengers, onSeatSelect }) => {
 };
 
 export default SeatMap;
-
