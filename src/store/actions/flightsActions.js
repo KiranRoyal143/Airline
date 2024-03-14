@@ -1,120 +1,218 @@
-// flightsActions.js
+// actions/flightsActions.js
 
-export const FETCH_FLIGHTS_REQUEST = "FETCH_FLIGHTS_REQUEST";
+// Action types
 export const FETCH_FLIGHTS_SUCCESS = "FETCH_FLIGHTS_SUCCESS";
 export const FETCH_FLIGHTS_FAILURE = "FETCH_FLIGHTS_FAILURE";
-
 export const ADD_ANCILLARY_SERVICE = "ADD_ANCILLARY_SERVICE";
 export const DELETE_ANCILLARY_SERVICE = "DELETE_ANCILLARY_SERVICE";
 export const UPDATE_PASSENGER_DETAILS = "UPDATE_PASSENGER_DETAILS";
+export const UPDATE_FLIGHT = "UPDATE_FLIGHT";
 export const CHANGE_PASSENGER_SEAT = "CHANGE_PASSENGER_SEAT";
 export const UPDATE_PASSENGER_CHECK_IN = "UPDATE_PASSENGER_CHECK_IN";
 export const UNDO_PASSENGER_CHECK_IN = "UNDO_PASSENGER_CHECK_IN";
 export const ADD_IN_FLIGHT_SHOP_REQUEST = "ADD_IN_FLIGHT_SHOP_REQUEST";
 export const CHANGE_MEAL_PREFERENCE = "CHANGE_MEAL_PREFERENCE";
 
-// Action creator to change a passenger's seat
-export const changePassengerSeat = (flightId, passengerId, newSeat) => {
-  return {
-    type: CHANGE_PASSENGER_SEAT,
-    payload: { flightId, passengerId, newSeat },
-  };
-};
-
 // Action creators
-export const fetchFlightsRequest = () => {
-  return {
-    type: FETCH_FLIGHTS_REQUEST,
-  };
-};
+export const fetchFlightsSuccess = (flights) => ({
+  type: FETCH_FLIGHTS_SUCCESS,
+  payload: flights,
+});
 
-export const fetchFlightsSuccess = (flights) => {
-  return {
-    type: FETCH_FLIGHTS_SUCCESS,
-    payload: flights,
-  };
-};
+export const fetchFlightsFailure = (error) => ({
+  type: FETCH_FLIGHTS_FAILURE,
+  payload: error,
+});
 
-export const fetchFlightsFailure = (error) => {
-  return {
-    type: FETCH_FLIGHTS_FAILURE,
-    payload: error,
-  };
-};
+export const addAncillaryService = (flightId, service) => ({
+  type: ADD_ANCILLARY_SERVICE,
+  payload: { flightId, service },
+});
 
-export const addInFlightShopRequest = (flightId, passengerId, newItem) => {
-  return {
-    type: ADD_IN_FLIGHT_SHOP_REQUEST,
-    payload: { flightId, passengerId, newItem },
-  };
-};
+export const deleteAncillaryService = (flightId, service) => ({
+  type: DELETE_ANCILLARY_SERVICE,
+  payload: { flightId, service },
+});
 
-export const changeMealPreference = (
+export const updatePassengerDetails = (
   flightId,
   passengerId,
-  newMealPreference
-) => {
-  return {
-    type: CHANGE_MEAL_PREFERENCE,
-    payload: { flightId, passengerId, newMealPreference },
-  };
-};
+  updatedPassenger
+) => ({
+  type: UPDATE_PASSENGER_DETAILS,
+  payload: { flightId, passengerId, updatedPassenger },
+});
 
-// Async action creator
+export const updateFlight = (updatedFlight) => ({
+  type: UPDATE_FLIGHT,
+  payload: updatedFlight,
+});
+
+export const addInFlightShopRequest = (flightId, passengerId, newItem) => ({
+  type: ADD_IN_FLIGHT_SHOP_REQUEST,
+  payload: { flightId, passengerId, newItem },
+});
+
+export const changeMealPreference = (flightId, passengerId) => ({
+  type: CHANGE_MEAL_PREFERENCE,
+  payload: { flightId, passengerId },
+});
+
 export const fetchFlights = () => {
-  return (dispatch) => {
-    dispatch(fetchFlightsRequest());
+  return async (dispatch) => {
+    try {
+      const response = await fetch("http://localhost:3000/flights");
 
-    // Simulate an API call (replace with actual API call)
-    setTimeout(() => {
-      const dummyFlights = [
-        // Your flight data here
-      ];
-      dispatch(fetchFlightsSuccess(dummyFlights));
-    }, 1000);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      dispatch(fetchFlightsSuccess(data));
+    } catch (error) {
+      dispatch(fetchFlightsFailure(error.message));
+    }
   };
 };
 
-// Async action creator
-export const addAncillaryService = (flight, service) => {
-  return (dispatch) => {
-    dispatch({
-      type: ADD_ANCILLARY_SERVICE,
-      payload: { flight, service },
-    });
-  };
-};
-
-export const deleteAncillaryService = (flight, service) => {
-  return (dispatch) => {
-    dispatch({
-      type: DELETE_ANCILLARY_SERVICE,
-      payload: { flight, service },
-    });
-  };
-};
-
-// Action creator to update passenger check-in status
 export const updatePassengerCheckIn = (flightId, passengerId) => {
-  return {
-    type: UPDATE_PASSENGER_CHECK_IN,
-    payload: { flightId, passengerId },
+  return async (dispatch, getState) => {
+    try {
+      const { flights } = getState();
+      const flightIndex = flights.flights.findIndex(
+        (flight) => flight.id === flightId
+      );
+      if (flightIndex === -1) {
+        throw new Error("Flight not found.");
+      }
+
+      const passengerIndex = flights.flights[flightIndex].passengers.findIndex(
+        (passenger) => passenger.id === passengerId
+      );
+      if (passengerIndex === -1) {
+        throw new Error("Passenger not found.");
+      }
+
+      const updatedFlight = { ...flights.flights[flightIndex] };
+      const updatedPassenger = { ...updatedFlight.passengers[passengerIndex] };
+
+      updatedPassenger.isCheckedIn = true;
+
+      updatedFlight.passengers[passengerIndex] = updatedPassenger;
+
+      await fetch("http://localhost:3000/flights/" + flightId, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFlight),
+      });
+
+      dispatch({
+        type: UPDATE_FLIGHT,
+        payload: updatedFlight,
+      });
+    } catch (error) {
+      console.error("Error updating passenger check-in:", error);
+    }
   };
 };
 
-// Action creator to undo passenger check-in status
 export const undoPassengerCheckIn = (flightId, passengerId) => {
-  return {
-    type: UNDO_PASSENGER_CHECK_IN,
-    payload: { flightId, passengerId },
+  return async (dispatch, getState) => {
+    try {
+      const { flights } = getState();
+      const flightIndex = flights.flights.findIndex(
+        (flight) => flight.id === flightId
+      );
+      if (flightIndex === -1) {
+        throw new Error("Flight not found.");
+      }
+
+      const passengerIndex = flights.flights[flightIndex].passengers.findIndex(
+        (passenger) => passenger.id === passengerId
+      );
+      if (passengerIndex === -1) {
+        throw new Error("Passenger not found.");
+      }
+
+      const updatedFlight = { ...flights.flights[flightIndex] };
+      const updatedPassenger = { ...updatedFlight.passengers[passengerIndex] };
+
+      updatedPassenger.isCheckedIn = false;
+
+      updatedFlight.passengers[passengerIndex] = updatedPassenger;
+
+      await fetch("http://localhost:3000/flights/" + flightId, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFlight),
+      });
+
+      dispatch({
+        type: UPDATE_FLIGHT,
+        payload: updatedFlight,
+      });
+    } catch (error) {
+      console.error("Error undoing passenger check-in:", error);
+    }
   };
 };
 
-export const updatePassengerDetails = (flight, updatedPassenger) => {
-  return (dispatch) => {
-    dispatch({
-      type: UPDATE_PASSENGER_DETAILS,
-      payload: { flight, updatedPassenger },
-    });
+export const changePassengerSeat = (flightId, passengerId, newSeat) => {
+  return async (dispatch, getState) => {
+    try {
+      const { flights } = getState();
+      const flightIndex = flights.flights.findIndex(
+        (flight) => flight.id === flightId
+      );
+      if (flightIndex === -1) {
+        throw new Error("Flight not found.");
+      }
+
+      const passengerIndex = flights.flights[flightIndex].passengers.findIndex(
+        (passenger) => passenger.id === passengerId
+      );
+      if (passengerIndex === -1) {
+        throw new Error("Passenger not found.");
+      }
+
+      const updatedFlight = { ...flights.flights[flightIndex] };
+      const updatedPassengers = [...updatedFlight.passengers]; // Make a copy of passengers array
+      const updatedPassengerIndex = updatedPassengers.findIndex(
+        (passenger) => passenger.id === passengerId
+      );
+
+      if (updatedPassengerIndex === -1) {
+        throw new Error("Passenger not found in the updated passengers array.");
+      }
+
+      // Update the seat number of the passenger
+      updatedPassengers[updatedPassengerIndex] = {
+        ...updatedPassengers[updatedPassengerIndex],
+        seatNumber: newSeat,
+      };
+
+      // Update the passengers array in the updated flight object
+      updatedFlight.passengers = updatedPassengers;
+
+      // Update the flight on the server
+      await fetch(`http://localhost:3000/flights/${flightId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFlight),
+      });
+
+      dispatch({
+        type: UPDATE_FLIGHT,
+        payload: updatedFlight,
+      });
+    } catch (error) {
+      console.error("Error changing passenger seat:", error);
+    }
   };
 };

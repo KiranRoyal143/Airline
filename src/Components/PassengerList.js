@@ -1,37 +1,62 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changePassengerSeat } from "../store/actions/flightsActions";
 
-const PassengerList = ({
-  passengers,
-  onCheckIn,
-  onUndoCheckIn,
-  onChangeSeat,
-}) => {
+const PassengerList = ({ flightId }) => {
+  const passengers = useSelector(
+    (state) =>
+      state.flights.flights.find((flight) => flight.id === flightId).passengers
+  );
   const [filter, setFilter] = useState("all");
+  const [seatInputs, setSeatInputs] = useState({});
+  const dispatch = useDispatch();
 
   const handleFilterChange = (e) => {
-    const filteredPassengers = passengers.filter((passenger) => {
-      const isCheckInFiltered =
-        filter === "all" || (filter === "checkedIn" && passenger.isCheckedIn);
-      const isWheelchairFiltered =
-        filter === "all" ||
-        (filter === "wheelchair" && passenger.requiresWheelchair);
-      const isInfantFiltered =
-        filter === "all" || (filter === "infant" && passenger.hasInfant);
-
-      return isCheckInFiltered || isWheelchairFiltered || isInfantFiltered;
-    });
-
     setFilter(e.target.value);
-
-    return filteredPassengers;
   };
+
+  const handleSeatChange = (passengerId) => {
+    const newSeatNumber = seatInputs[passengerId];
+    if (newSeatNumber && newSeatNumber.trim() !== "") {
+      dispatch(
+        changePassengerSeat(flightId, passengerId, newSeatNumber.trim())
+      );
+      setSeatInputs({
+        ...seatInputs,
+        [passengerId]: "", // Clear the input after changing the seat
+      });
+    }
+  };
+
+  const filterPassengers = () => {
+    return passengers.filter((passenger) => {
+      const checkedIn = passenger.isCheckedIn;
+      const requiresWheelchair = passenger.requiresWheelchair;
+      const hasInfant = passenger.hasInfant;
+
+      switch (filter) {
+        case "checkedIn":
+          return checkedIn;
+        case "notCheckedIn":
+          return !checkedIn;
+        case "wheelchair":
+          return requiresWheelchair;
+        case "infant":
+          return hasInfant;
+        default:
+          return true;
+      }
+    });
+  };
+
+  const filteredPassengers = filterPassengers();
 
   return (
     <div>
       <h2>Passenger List</h2>
       <div>
         Filter by:
-        <select onChange={handleFilterChange}>
+        <select value={filter} onChange={handleFilterChange}>
           <option value="all">All</option>
           <option value="checkedIn">Checked-In</option>
           <option value="notCheckedIn">Not Checked-In</option>
@@ -40,30 +65,30 @@ const PassengerList = ({
         </select>
       </div>
       <ul>
-        {passengers
-          .filter((passenger) => {
-            if (filter === "all") return true;
-            if (filter === "checkedIn") return passenger.isCheckedIn;
-            if (filter === "notCheckedIn") return !passenger.isCheckedIn;
-            if (filter === "wheelchair") return passenger.requiresWheelchair;
-            if (filter === "infant") return passenger.hasInfant;
-            return true;
-          })
-          .map((passenger) => (
-            <li key={passenger.id}>
-              <strong>Name:</strong> {passenger.name} |{" "}
-              <strong>Ancillary Services:</strong>{" "}
-              {passenger.ancillaryServices.join(", ")} |{" "}
-              <strong>Seat Number:</strong> {passenger.seatNumber} |{" "}
-              <button onClick={() => onChangeSeat(passenger)}>
+        {filteredPassengers.map((passenger) => (
+          <li key={passenger.id}>
+            <strong>Name:</strong> {passenger.name} |{" "}
+            <strong>Ancillary Services:</strong>{" "}
+            {passenger.ancillaryServices.join(", ")} |{" "}
+            <strong>Seat Number:</strong> {passenger.seatNumber}
+            <div>
+              <input
+                type="text"
+                placeholder="New Seat Number"
+                value={seatInputs[passenger.id] || ""}
+                onChange={(e) =>
+                  setSeatInputs({
+                    ...seatInputs,
+                    [passenger.id]: e.target.value,
+                  })
+                }
+              />
+              <button onClick={() => handleSeatChange(passenger.id)}>
                 Change Seat
-              </button>{" "}
-              | <button onClick={() => onCheckIn(passenger)}>Check-In</button> |{" "}
-              <button onClick={() => onUndoCheckIn(passenger)}>
-                Undo Check-In
               </button>
-            </li>
-          ))}
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );

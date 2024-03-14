@@ -46,12 +46,15 @@ const CheckIn = ({ selectedFlight, onBack }) => {
       {selectedFlight && (
         <div>
           <h2>Selected Flight: {selectedFlight.flightNumber}</h2>
+          <h3>Schedule Time: {selectedFlight.scheduleTime}</h3>
           {/* Display other flight details here */}
           <SeatMap
             passengers={selectedFlight.passengers}
             onSeatSelect={handleSeatSelect}
+            flightId={selectedFlight.id}
           />
           <PassengerList
+            flightId={selectedFlight.id}
             passengers={selectedFlight.passengers}
             onCheckIn={handleCheckIn}
             onUndoCheckIn={handleUndoCheckIn}
@@ -61,7 +64,7 @@ const CheckIn = ({ selectedFlight, onBack }) => {
           {selectedFlight.passengers.map((passenger) => (
             <PassengerDetails
               key={passenger.id}
-              passenger={passenger}
+              passengerId={passenger.id}
               onCheckIn={handleCheckIn}
               onUndoCheckIn={handleUndoCheckIn}
               onChangeSeat={handleChangeSeat}

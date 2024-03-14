@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FlightList from "../FlightList";
 import CheckIn from "../CheckIn";
 import InFlightManagement from "../InFlightManagement";
 
+// Import necessary actions
+import { fetchFlights } from "../../store/actions/flightsActions";
+import { useDispatch, useSelector } from 'react-redux';
+
 function StaffDashboard() {
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
+
+  const flights = useSelector((state) => state.flights.flights);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // Fetch flights when the component mounts
+    dispatch(fetchFlights());
+  }, [dispatch]);
 
   const handleSelectFlight = (flight) => {
     setSelectedFlight(flight);
@@ -26,6 +38,7 @@ function StaffDashboard() {
   const handleBackToFlightSelection = () => {
     setSelectedFlight(null);
   };
+
   return (
     <div>
       {selectedTask === null && (
@@ -39,7 +52,7 @@ function StaffDashboard() {
       {selectedTask !== null && selectedFlight === null && (
         <div>
           <h1>Select a Flight</h1>
-          <FlightList onSelectFlight={handleSelectFlight} />
+          <FlightList flights={flights} onSelectFlight={handleSelectFlight} />
           <button onClick={handleBackToTaskSelection}>
             Back to Task Selection
           </button>

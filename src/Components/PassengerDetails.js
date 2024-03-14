@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+// PassengerDetails.js
+import React from "react";
+import { useSelector } from "react-redux";
 
-const PassengerDetails = ({ passenger, onChangeSeat }) => {
-  const [newSeat, setNewSeat] = useState("");
-  const handleSeatChange = () => {
-    onChangeSeat(passenger, newSeat); // Correct the function call
-    setNewSeat("");
-  };
+const PassengerDetails = ({ passengerId }) => {
+  const passenger = useSelector((state) => {
+    const { flights } = state.flights;
+    for (const flight of flights) {
+      const foundPassenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (foundPassenger) return foundPassenger;
+    }
+    return null; // Return null if passenger is not found
+  });
+
+  if (!passenger) {
+    return <div>No passenger found</div>;
+  }
 
   return (
     <div>
@@ -20,15 +31,6 @@ const PassengerDetails = ({ passenger, onChangeSeat }) => {
       <p>
         <strong>Seat Number:</strong> {passenger.seatNumber}
       </p>
-      <div>
-        <input
-          type="text"
-          placeholder="New Seat Number"
-          value={newSeat}
-          onChange={(e) => setNewSeat(e.target.value)}
-        />
-        <button onClick={handleSeatChange}>Change Seat</button>
-      </div>
     </div>
   );
 };

@@ -1,12 +1,22 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  undoPassengerCheckIn,
+  updatePassengerCheckIn,
+} from "../store/actions/flightsActions";
 
-const SeatMap = ({ passengers, onSeatSelect }) => {
+const SeatMap = ({ flightId }) => {
+  const passengers = useSelector(
+    (state) =>
+      state.flights.flights.find((flight) => flight.id === flightId).passengers
+  );
+  const dispatch = useDispatch();
+
   const handleSeatClick = (passenger) => {
-    // If the passenger is already checked-in, undo check-in
     if (passenger.isCheckedIn) {
-      onSeatSelect({ ...passenger, isCheckedIn: false });
+      dispatch(undoPassengerCheckIn(flightId, passenger.id)); // Undo check-in
     } else {
-      onSeatSelect(passenger);
+      dispatch(updatePassengerCheckIn(flightId, passenger.id)); // Check-in
     }
   };
 
