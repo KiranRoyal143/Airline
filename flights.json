@@ -1,0 +1,86 @@
+{
+  "flights": [
+    {
+      "id": 1,
+      "flightNumber": "ABC123",
+      "scheduleTime": "2024-07-24 10:00",
+      "passengers": [
+        {
+          "id": 1,
+          "name": "John Doe",
+          "ancillaryServices": [
+            "Extra Legroom",
+            "In-flight Meal"
+          ],
+          "seatNumber": "A",
+          "isCheckedIn": true,
+          "requiresWheelchair": false,
+          "hasInfant": false
+        },
+        {
+          "id": 2,
+          "name": "Jane Smith",
+          "ancillaryServices": [
+            "Priority Boarding"
+          ],
+          "seatNumber": "B",
+          "isCheckedIn": false,
+          "requiresWheelchair": true,
+          "hasInfant": false
+        },
+        {
+          "id": 3,
+          "name": "Jack Ryan",
+          "ancillaryServices": [
+            "Priority Boarding"
+          ],
+          "seatNumber": "C",
+          "isCheckedIn": false,
+          "requiresWheelchair": true,
+          "hasInfant": true
+        },
+        {
+          "id": 4,
+          "name": "Dane Smith",
+          "ancillaryServices": [
+            "Priority Boarding"
+          ],
+          "seatNumber": "D",
+          "isCheckedIn": true,
+          "requiresWheelchair": true,
+          "hasInfant": false
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "flightNumber": "ABC1234",
+      "scheduleTime": "2024-07-24 11:00",
+      "passengers": [
+        {
+          "id": 1,
+          "name": "John",
+          "ancillaryServices": [
+            "Extra Legroom",
+            "In-flight Meal"
+          ],
+          "seatNumber": "1A",
+          "isCheckedIn": true,
+          "requiresWheelchair": false,
+          "hasInfant": false
+        },
+        {
+          "id": 2,
+          "name": "Smith",
+          "ancillaryServices": [
+            "Priority Boarding"
+          ],
+          "seatNumber": "1B",
+          "isCheckedIn": false,
+          "requiresWheelchair": true,
+          "hasInfant": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,13 +1,22 @@
-// SeatMap.js
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  undoPassengerCheckIn,
+  updatePassengerCheckIn,
+} from "../store/actions/flightsActions";
 
-const SeatMap = ({ passengers, onSeatSelect }) => {
+const SeatMap = ({ flightId }) => {
+  const passengers = useSelector(
+    (state) =>
+      state.flights.flights.find((flight) => flight.id === flightId).passengers
+  );
+  const dispatch = useDispatch();
+
   const handleSeatClick = (passenger) => {
-    // If the passenger is already checked-in, undo check-in
     if (passenger.isCheckedIn) {
-      onSeatSelect({ ...passenger, isCheckedIn: false });
+      dispatch(undoPassengerCheckIn(flightId, passenger.id)); // Undo check-in
     } else {
-      onSeatSelect(passenger);
+      dispatch(updatePassengerCheckIn(flightId, passenger.id)); // Check-in
     }
   };
 
@@ -20,8 +29,10 @@ const SeatMap = ({ passengers, onSeatSelect }) => {
             key={passenger.id}
             className={`seat ${passenger.isCheckedIn ? "checked-in" : ""} ${
               passenger.requiresSpecialMeal ? "special-meal" : ""
+            } ${passenger.requiresWheelchair ? "wheelchair" : ""} ${
+              passenger.hasInfant ? "infant" : ""
             }`}
-            onClick={() => handleSeatClick(passenger)} // Use the handleSeatClick function here
+            onClick={() => handleSeatClick(passenger)}
           >
             {passenger.seatNumber}
           </div>
@@ -32,4 +43,3 @@ const SeatMap = ({ passengers, onSeatSelect }) => {
 };
 
 export default SeatMap;
-

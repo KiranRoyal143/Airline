@@ -1,28 +1,17 @@
 import React, { useState } from "react";
-import FlightList from "../FlightList";
-import PassengerList from "../PassengerList";
-import AncillaryServiceList from "../AncillaryServiceList";
+import { useSelector, useDispatch } from "react-redux";
+import FlightList from "../FlightList"; // Correct the path if needed
+import PassengerList from "../PassengerList"; // Correct the path if needed
+import AncillaryServiceList from "../AncillaryServiceList"; // Correct the path if needed
+import {
+  updatePassengerDetails,
+  addAncillaryService,
+  deleteAncillaryService,
+} from "../../store/actions/flightsActions"; // Correct the path if needed
 
 const AdminDashboard = () => {
-  const [flights, setFlights] = useState([
-    // Dummy flight data for testing purposes
-    {
-      id: 1,
-      flightNumber: "ABC123",
-      scheduleTime: "2023-07-24 10:00",
-      passengers: [
-        // Add passengers here
-      ],
-      ancillaryServices: [
-        "Extra Legroom",
-        "In-flight Meal",
-        "Priority Boarding",
-        // Add more ancillary services here
-      ],
-    },
-    // Add more flights here
-  ]);
-
+  const flights = useSelector((state) => state.flights.flights);
+  const dispatch = useDispatch();
   const [selectedFlight, setSelectedFlight] = useState(null);
   const [newAncillaryService, setNewAncillaryService] = useState("");
 
@@ -32,31 +21,17 @@ const AdminDashboard = () => {
 
   const handleAddAncillaryService = () => {
     if (newAncillaryService) {
-      setSelectedFlight((prevFlight) => ({
-        ...prevFlight,
-        ancillaryServices: [...prevFlight.ancillaryServices, newAncillaryService],
-      }));
+      dispatch(addAncillaryService(selectedFlight, newAncillaryService));
       setNewAncillaryService("");
     }
   };
 
   const handleDeleteAncillaryService = (service) => {
-    setSelectedFlight((prevFlight) => ({
-      ...prevFlight,
-      ancillaryServices: prevFlight.ancillaryServices.filter((s) => s !== service),
-    }));
+    dispatch(deleteAncillaryService(selectedFlight, service));
   };
-  
+
   const handleUpdatePassenger = (updatedPassenger) => {
-    // Find the selected passenger in the flights data and update their details
-    const updatedFlights = flights.map((flight) => {
-      const updatedPassengers = flight.passengers.map((passenger) =>
-        passenger.id === updatedPassenger.id ? updatedPassenger : passenger
-      );
-      return { ...flight, passengers: updatedPassengers };
-    });
-    
-    setFlights(updatedFlights);
+    dispatch(updatePassengerDetails(selectedFlight, updatedPassenger));
   };
 
   return (
@@ -68,13 +43,20 @@ const AdminDashboard = () => {
         <div>
           <h2>Selected Flight: {selectedFlight.flightNumber}</h2>
           {/* Display other flight details here */}
-          <PassengerList passengers={selectedFlight.passengers} onUpdatePassenger={handleUpdatePassenger}/>
-          <AncillaryServiceList services={selectedFlight.ancillaryServices} />
-          <h3>Ancillary Services</h3>
-          <AncillaryServiceList
-            services={selectedFlight.ancillaryServices}
-            onDeleteService={handleDeleteAncillaryService}
+          <PassengerList
+            passengers={selectedFlight.passengers}
+            onUpdatePassenger={handleUpdatePassenger}
           />
+          {selectedFlight.ancillaryServices && ( // Check if ancillaryServices exists
+            <AncillaryServiceList services={selectedFlight.ancillaryServices} />
+          )}
+          <h3>Ancillary Services</h3>
+          {selectedFlight.ancillaryServices && ( // Check if ancillaryServices exists
+            <AncillaryServiceList
+              services={selectedFlight.ancillaryServices}
+              onDeleteService={handleDeleteAncillaryService}
+            />
+          )}
           <div>
             <input
               type="text"
@@ -91,4 +73,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-
