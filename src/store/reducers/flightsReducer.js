@@ -2,12 +2,11 @@ import {
   FETCH_FLIGHTS_SUCCESS,
   FETCH_FLIGHTS_FAILURE,
   ADD_ANCILLARY_SERVICE,
-  DELETE_ANCILLARY_SERVICE,
   UPDATE_PASSENGER_DETAILS,
   UPDATE_FLIGHT,
   CHANGE_PASSENGER_SEAT,
-  UPDATE_PASSENGER_CHECK_IN,
-  UNDO_PASSENGER_CHECK_IN,
+  CHANGE_MEAL_PREFERENCE,
+  ADD_IN_FLIGHT_SHOP_REQUEST,
 } from "../actions/flightsActions";
 
 const initialState = {
@@ -59,19 +58,76 @@ const flightsReducer = (state = initialState, action) => {
       };
 
     case ADD_ANCILLARY_SERVICE:
-      // Implement your logic for adding ancillary service
-      return state;
-    case DELETE_ANCILLARY_SERVICE:
-      // Implement your logic for deleting ancillary service
-      return state;
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    ancillaryServices: [
+                      ...passenger.ancillaryServices,
+                      action.payload.service,
+                    ],
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+    case CHANGE_MEAL_PREFERENCE:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    mealPreference: action.payload.newMealPreference,
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+    case ADD_IN_FLIGHT_SHOP_REQUEST:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    inFlightShopRequests: [
+                      ...passenger.inFlightShopRequests,
+                      action.payload.newItem,
+                    ],
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
     case UPDATE_PASSENGER_DETAILS:
       // Implement your logic for updating passenger details
-      return state;
-    case UPDATE_PASSENGER_CHECK_IN:
-      // Implement your logic for updating passenger check-in status
-      return state;
-    case UNDO_PASSENGER_CHECK_IN:
-      // Implement your logic for undoing passenger check-in status
       return state;
     default:
       return state;

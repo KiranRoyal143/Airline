@@ -11,7 +11,7 @@ const PassengerDetails = ({ passengerId }) => {
       );
       if (foundPassenger) return foundPassenger;
     }
-    return null; // Return null if passenger is not found
+    return null;
   });
 
   if (!passenger) {
