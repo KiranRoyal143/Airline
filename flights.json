@@ -10,7 +10,14 @@
           "name": "John Doe",
           "ancillaryServices": [
             "Extra Legroom",
-            "In-flight Meal"
+            "In-flight Meal",
+            "Meals"
+          ],
+          "mealPreference": "In-flight Meal",
+          "inFlightShopRequests": [
+            "Chockolates",
+            "Wine",
+            "Bag"
           ],
           "seatNumber": "A",
           "isCheckedIn": true,
@@ -21,7 +28,13 @@
           "id": 2,
           "name": "Jane Smith",
           "ancillaryServices": [
-            "Priority Boarding"
+            "Priority Boarding",
+            "In-flight Meal"
+          ],
+          "mealPreference": "No - Meal",
+          "inFlightShopRequests": [
+            "Bags",
+            "Shoes"
           ],
           "seatNumber": "B",
           "isCheckedIn": false,
@@ -34,6 +47,11 @@
           "ancillaryServices": [
             "Priority Boarding"
           ],
+          "mealPreference": "No - Meal",
+          "inFlightShopRequests": [
+            "Chockolates",
+            "Wine"
+          ],
           "seatNumber": "C",
           "isCheckedIn": false,
           "requiresWheelchair": true,
@@ -43,7 +61,83 @@
           "id": 4,
           "name": "Dane Smith",
           "ancillaryServices": [
+            "Priority Boarding",
+            "In-flight Meal"
+          ],
+          "mealPreference": "In-flight Meal",
+          "inFlightShopRequests": [
+            "Bag",
+            "Shoes"
+          ],
+          "seatNumber": "D",
+          "isCheckedIn": true,
+          "requiresWheelchair": true,
+          "hasInfant": false
+        }
+      ],
+      "passenger": [
+        {
+          "id": 1,
+          "name": "John Doe",
+          "ancillaryServices": [
+            "Extra Legroom",
+            "In-flight Meal",
+            "Meals"
+          ],
+          "mealPreference": "No Meal",
+          "inFlightShopRequests": [
+            "Chockolates",
+            "Wine"
+          ],
+          "seatNumber": "A",
+          "isCheckedIn": true,
+          "requiresWheelchair": false,
+          "hasInfant": false
+        },
+        {
+          "id": 2,
+          "name": "Jane Smith",
+          "ancillaryServices": [
+            "Priority Boarding",
+            "In-flight Meal"
+          ],
+          "mealPreference": "No - Meal",
+          "inFlightShopRequests": [
+            "Bags",
+            "Shoes"
+          ],
+          "seatNumber": "B",
+          "isCheckedIn": false,
+          "requiresWheelchair": true,
+          "hasInfant": false
+        },
+        {
+          "id": 3,
+          "name": "Jack Ryan",
+          "ancillaryServices": [
             "Priority Boarding"
+          ],
+          "mealPreference": "No - Meal",
+          "inFlightShopRequests": [
+            "Chockolates",
+            "Wine"
+          ],
+          "seatNumber": "C",
+          "isCheckedIn": false,
+          "requiresWheelchair": true,
+          "hasInfant": true
+        },
+        {
+          "id": 4,
+          "name": "Dane Smith",
+          "ancillaryServices": [
+            "Priority Boarding",
+            "In-flight Meal"
+          ],
+          "mealPreference": "In-flight Meal",
+          "inFlightShopRequests": [
+            "Bag",
+            "Shoes"
           ],
           "seatNumber": "D",
           "isCheckedIn": true,
@@ -64,6 +158,11 @@
             "Extra Legroom",
             "In-flight Meal"
           ],
+          "mealPreference": "In-flight Meal",
+          "inFlightShopRequests": [
+            "Chockolates",
+            "Wine"
+          ],
           "seatNumber": "1A",
           "isCheckedIn": true,
           "requiresWheelchair": false,
@@ -74,6 +173,11 @@
           "name": "Smith",
           "ancillaryServices": [
             "Priority Boarding"
+          ],
+          "mealPreference": "No - Meal",
+          "inFlightShopRequests": [
+            "Bags",
+            "Shoes"
           ],
           "seatNumber": "1B",
           "isCheckedIn": false,
