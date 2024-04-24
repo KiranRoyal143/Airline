@@ -7,22 +7,27 @@
       "passengers": [
         {
           "id": 1,
-          "name": "John Doe",
+          "name": "Daniel",
           "ancillaryServices": [
             "Extra Legroom",
             "In-flight Meal",
-            "Meals"
+            "Meals",
+            "Chocolate"
           ],
-          "mealPreference": "In-flight Meal",
+          "mealPreference": "No Meal",
           "inFlightShopRequests": [
             "Chockolates",
             "Wine",
-            "Bag"
+            "Bag",
+            "Laptop"
           ],
           "seatNumber": "A",
-          "isCheckedIn": true,
+          "isCheckedIn": false,
           "requiresWheelchair": false,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "Available",
+          "address": "India",
+          "dob": "24-08-2000"
         },
         {
           "id": 2,
@@ -39,7 +44,10 @@
           "seatNumber": "B",
           "isCheckedIn": false,
           "requiresWheelchair": true,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "Available",
+          "address": "America",
+          "dob": "24-08-1999"
         },
         {
           "id": 3,
@@ -55,7 +63,10 @@
           "seatNumber": "C",
           "isCheckedIn": false,
           "requiresWheelchair": true,
-          "hasInfant": true
+          "hasInfant": true,
+          "passport": "Available",
+          "address": "",
+          "dob": "24-08-2000"
         },
         {
           "id": 4,
@@ -72,27 +83,36 @@
           "seatNumber": "D",
           "isCheckedIn": true,
           "requiresWheelchair": true,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "Available",
+          "address": "India",
+          "dob": ""
         }
       ],
       "passenger": [
         {
           "id": 1,
-          "name": "John Doe",
+          "name": "John",
           "ancillaryServices": [
             "Extra Legroom",
             "In-flight Meal",
-            "Meals"
+            "Meals",
+            "Chocolate"
           ],
           "mealPreference": "No Meal",
           "inFlightShopRequests": [
             "Chockolates",
-            "Wine"
+            "Wine",
+            "Bag",
+            "Laptop"
           ],
           "seatNumber": "A",
-          "isCheckedIn": true,
+          "isCheckedIn": false,
           "requiresWheelchair": false,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "Available",
+          "address": "India",
+          "dob": "24-08-2000"
         },
         {
           "id": 2,
@@ -109,7 +129,10 @@
           "seatNumber": "B",
           "isCheckedIn": false,
           "requiresWheelchair": true,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "",
+          "address": "America",
+          "dob": "24-08-1999"
         },
         {
           "id": 3,
@@ -125,7 +148,10 @@
           "seatNumber": "C",
           "isCheckedIn": false,
           "requiresWheelchair": true,
-          "hasInfant": true
+          "hasInfant": true,
+          "passport": "Available",
+          "address": "",
+          "dob": "24-08-2000"
         },
         {
           "id": 4,
@@ -142,7 +168,10 @@
           "seatNumber": "D",
           "isCheckedIn": true,
           "requiresWheelchair": true,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "Available",
+          "address": "India",
+          "dob": ""
         }
       ]
     },
@@ -166,7 +195,10 @@
           "seatNumber": "1A",
           "isCheckedIn": true,
           "requiresWheelchair": false,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "",
+          "address": "India",
+          "dob": ""
         },
         {
           "id": 2,
@@ -182,7 +214,10 @@
           "seatNumber": "1B",
           "isCheckedIn": false,
           "requiresWheelchair": true,
-          "hasInfant": false
+          "hasInfant": false,
+          "passport": "Available",
+          "address": "",
+          "dob": ""
         }
       ]
     }

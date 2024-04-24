@@ -1,71 +1,45 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import FlightList from "../FlightList"; // Correct the path if needed
-import PassengerList from "../PassengerList"; // Correct the path if needed
-import AncillaryServiceList from "../AncillaryServiceList"; // Correct the path if needed
-import {
-  updatePassengerDetails,
-  addAncillaryService,
-  deleteAncillaryService,
-} from "../../store/actions/flightsActions"; // Correct the path if needed
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import FlightList from "../FlightList";
+import { fetchFlights } from "../../store/actions/flightsActions";
+import Navigation from "./Navigation";
+import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
+  const [selectedOption, setSelectedOption] = React.useState(null);
+  const [selectedFlight, setSelectedFlight] = React.useState(null);
   const flights = useSelector((state) => state.flights.flights);
   const dispatch = useDispatch();
-  const [selectedFlight, setSelectedFlight] = useState(null);
-  const [newAncillaryService, setNewAncillaryService] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchFlights());
+  }, [dispatch]);
 
   const handleSelectFlight = (flight) => {
     setSelectedFlight(flight);
   };
 
-  const handleAddAncillaryService = () => {
-    if (newAncillaryService) {
-      dispatch(addAncillaryService(selectedFlight, newAncillaryService));
-      setNewAncillaryService("");
-    }
-  };
-
-  const handleDeleteAncillaryService = (service) => {
-    dispatch(deleteAncillaryService(selectedFlight, service));
-  };
-
-  const handleUpdatePassenger = (updatedPassenger) => {
-    dispatch(updatePassengerDetails(selectedFlight, updatedPassenger));
+  const handleSelectOption = (option) => {
+    setSelectedOption(option);
   };
 
   return (
     <div>
-      <h1>Admin Dashboard</h1>
-      {!selectedFlight ? (
-        <FlightList flights={flights} onSelectFlight={handleSelectFlight} />
-      ) : (
-        <div>
-          <h2>Selected Flight: {selectedFlight.flightNumber}</h2>
-          {/* Display other flight details here */}
-          <PassengerList
-            passengers={selectedFlight.passengers}
-            onUpdatePassenger={handleUpdatePassenger}
-          />
-          {selectedFlight.ancillaryServices && ( // Check if ancillaryServices exists
-            <AncillaryServiceList services={selectedFlight.ancillaryServices} />
-          )}
-          <h3>Ancillary Services</h3>
-          {selectedFlight.ancillaryServices && ( // Check if ancillaryServices exists
-            <AncillaryServiceList
-              services={selectedFlight.ancillaryServices}
-              onDeleteService={handleDeleteAncillaryService}
-            />
-          )}
+      {selectedFlight === null && (
+        <div className="adminPage_SelectFlight">
           <div>
-            <input
-              type="text"
-              placeholder="New Ancillary Service"
-              value={newAncillaryService}
-              onChange={(e) => setNewAncillaryService(e.target.value)}
-            />
-            <button onClick={handleAddAncillaryService}>Add Service</button>
+            <h2>Select a Flight</h2>
+            <FlightList flights={flights} onSelectFlight={handleSelectFlight} />
           </div>
+        </div>
+      )}
+      {selectedFlight && (
+        <div>
+          <Navigation
+            onSelectOption={handleSelectOption}
+            selectedOption={selectedOption}
+            selectedFlight={selectedFlight}
+          />
         </div>
       )}
     </div>

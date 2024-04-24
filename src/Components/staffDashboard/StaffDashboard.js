@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import FlightList from "../FlightList";
 import CheckIn from "../CheckIn";
 import InFlightManagement from "../InFlightManagement";
-
-// Import necessary actions
 import { fetchFlights } from "../../store/actions/flightsActions";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 function StaffDashboard() {
   const [selectedFlight, setSelectedFlight] = useState(null);

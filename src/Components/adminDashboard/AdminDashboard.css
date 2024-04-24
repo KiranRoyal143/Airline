@@ -1,0 +1,21 @@
+.adminPage_SelectFlight {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.admin-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  top: 150px; /* Adjust this value as needed */
+}
+
+.admin-dashboard-content {
+  margin-top: 20px; /* Adjust this value as needed */
+}

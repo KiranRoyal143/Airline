@@ -12,6 +12,9 @@ export const UPDATE_PASSENGER_CHECK_IN = "UPDATE_PASSENGER_CHECK_IN";
 export const UNDO_PASSENGER_CHECK_IN = "UNDO_PASSENGER_CHECK_IN";
 export const ADD_IN_FLIGHT_SHOP_REQUEST = "ADD_IN_FLIGHT_SHOP_REQUEST";
 export const CHANGE_MEAL_PREFERENCE = "CHANGE_MEAL_PREFERENCE";
+export const UPDATE_PASSENGER_NAME = "UPDATE_PASSENGER_NAME";
+export const UPDATE_PASSPORT_DETAILS = "UPDATE_PASSPORT_DETAILS";
+export const UPDATE_ADDRESS_DETAILS = "UPDATE_ADDRESS_DETAILS";
 
 // Action creators
 export const fetchFlightsSuccess = (flights) => ({
@@ -378,6 +381,206 @@ export const addInFlightShopRequest = (flightId, passengerId, newItem) => {
       });
     } catch (error) {
       console.error("Error adding in-flight shop request:", error);
+    }
+  };
+};
+
+export const updatePassengerName = (flightId, passengerId, newName) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      // Find the correct passenger within the flight
+      const passengerIndex = flight.passengers.findIndex(
+        (passenger) => passenger.id === passengerId
+      );
+      if (passengerIndex === -1) {
+        throw new Error("Passenger not found");
+      }
+
+      // Create a new passenger object with updated name
+      const updatedPassenger = {
+        ...flight.passengers[passengerIndex],
+        name: newName,
+      };
+
+      // Update the passenger within the flight
+      const updatedPassengers = [
+        ...flight.passengers.slice(0, passengerIndex),
+        updatedPassenger,
+        ...flight.passengers.slice(passengerIndex + 1),
+      ];
+
+      // Create updated flight object with new passengers array
+      const updatedFlight = {
+        ...flight,
+        passengers: updatedPassengers,
+      };
+
+      // Update the flight data on the server
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+
+      // Dispatch action to update state in Redux store
+      dispatch({
+        type: UPDATE_PASSPORT_DETAILS,
+        payload: {
+          flightId,
+          passengerId,
+          newName,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating passenger name:", error);
+    }
+  };
+};
+
+export const updatePassportDetails = (
+  flightId,
+  passengerId,
+  updatedPassportDetails
+) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      // Find the correct passenger within the flight
+      const passengerIndex = flight.passengers.findIndex(
+        (passenger) => passenger.id === passengerId
+      );
+      if (passengerIndex === -1) {
+        throw new Error("Passenger not found");
+      }
+
+      // Create a new passenger object with updated name
+      const updatedPassenger = {
+        ...flight.passengers[passengerIndex],
+        passport: updatedPassportDetails,
+      };
+
+      // Update the passenger within the flight
+      const updatedPassengers = [
+        ...flight.passengers.slice(0, passengerIndex),
+        updatedPassenger,
+        ...flight.passengers.slice(passengerIndex + 1),
+      ];
+
+      // Create updated flight object with new passengers array
+      const updatedFlight = {
+        ...flight,
+        passengers: updatedPassengers,
+      };
+
+      // Update the flight data on the server
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+
+      // Dispatch action to update state in Redux store
+      dispatch({
+        type: UPDATE_PASSENGER_NAME,
+        payload: {
+          flightId,
+          passengerId,
+          updatedPassportDetails,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating passenger name:", error);
+    }
+  };
+};
+
+export const updateAddressDetails = (
+  flightId,
+  passengerId,
+  updatedAdressDetails
+) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      const passenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (!passenger) {
+        throw new Error("Passenger not found");
+      }
+
+      const updatedPassenger = {
+        ...passenger,
+        address: updatedAdressDetails,
+      };
+
+      const updatedFlight = {
+        ...flight,
+        passenger: flight.passengers.map((p) =>
+          p.id === passengerId ? updatedPassenger : p
+        ),
+      };
+
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+      dispatch({
+        type: UPDATE_ADDRESS_DETAILS,
+        payload: {
+          flightId,
+          passengerId,
+          updatedAdressDetails,
+        },
+      });
+    } catch (error) {
+      console.error("Error Address details service:", error);
     }
   };
 };
