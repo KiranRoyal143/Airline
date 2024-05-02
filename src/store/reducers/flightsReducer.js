@@ -140,7 +140,7 @@ const flightsReducer = (state = initialState, action) => {
                 if (passenger.id === action.payload.passengerId) {
                   return {
                     ...passenger,
-                    name: action.payload.updateNameDetails,
+                    name: action.payload.newName,
                   };
                 }
                 return passenger;

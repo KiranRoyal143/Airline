@@ -22,7 +22,7 @@
             "Laptop"
           ],
           "seatNumber": "A",
-          "isCheckedIn": false,
+          "isCheckedIn": true,
           "requiresWheelchair": false,
           "hasInfant": false,
           "passport": "Available",
@@ -92,7 +92,7 @@
       "passenger": [
         {
           "id": 1,
-          "name": "John",
+          "name": "Jack",
           "ancillaryServices": [
             "Extra Legroom",
             "In-flight Meal",
@@ -107,7 +107,7 @@
             "Laptop"
           ],
           "seatNumber": "A",
-          "isCheckedIn": false,
+          "isCheckedIn": true,
           "requiresWheelchair": false,
           "hasInfant": false,
           "passport": "Available",
@@ -130,7 +130,7 @@
           "isCheckedIn": false,
           "requiresWheelchair": true,
           "hasInfant": false,
-          "passport": "",
+          "passport": "Available",
           "address": "America",
           "dob": "24-08-1999"
         },

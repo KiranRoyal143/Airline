@@ -395,34 +395,25 @@ export const updatePassengerName = (flightId, passengerId, newName) => {
       }
       const flight = await response.json();
 
-      // Find the correct passenger within the flight
-      const passengerIndex = flight.passengers.findIndex(
+      const passenger = flight.passengers.find(
         (passenger) => passenger.id === passengerId
       );
-      if (passengerIndex === -1) {
+      if (!passenger) {
         throw new Error("Passenger not found");
       }
 
-      // Create a new passenger object with updated name
       const updatedPassenger = {
-        ...flight.passengers[passengerIndex],
+        ...passenger,
         name: newName,
       };
 
-      // Update the passenger within the flight
-      const updatedPassengers = [
-        ...flight.passengers.slice(0, passengerIndex),
-        updatedPassenger,
-        ...flight.passengers.slice(passengerIndex + 1),
-      ];
-
-      // Create updated flight object with new passengers array
       const updatedFlight = {
         ...flight,
-        passengers: updatedPassengers,
+        passengers: flight.passengers.map((p) =>
+          p.id === passengerId ? updatedPassenger : p
+        ),
       };
 
-      // Update the flight data on the server
       const putResponse = await fetch(
         `http://localhost:3000/flights/${flightId}`,
         {
@@ -438,9 +429,8 @@ export const updatePassengerName = (flightId, passengerId, newName) => {
         throw new Error("Failed to update flight data");
       }
 
-      // Dispatch action to update state in Redux store
       dispatch({
-        type: UPDATE_PASSPORT_DETAILS,
+        type: UPDATE_PASSENGER_NAME,
         payload: {
           flightId,
           passengerId,
@@ -467,34 +457,25 @@ export const updatePassportDetails = (
       }
       const flight = await response.json();
 
-      // Find the correct passenger within the flight
-      const passengerIndex = flight.passengers.findIndex(
+      const passenger = flight.passengers.find(
         (passenger) => passenger.id === passengerId
       );
-      if (passengerIndex === -1) {
+      if (!passenger) {
         throw new Error("Passenger not found");
       }
 
-      // Create a new passenger object with updated name
       const updatedPassenger = {
-        ...flight.passengers[passengerIndex],
+        ...passenger,
         passport: updatedPassportDetails,
       };
 
-      // Update the passenger within the flight
-      const updatedPassengers = [
-        ...flight.passengers.slice(0, passengerIndex),
-        updatedPassenger,
-        ...flight.passengers.slice(passengerIndex + 1),
-      ];
-
-      // Create updated flight object with new passengers array
       const updatedFlight = {
         ...flight,
-        passengers: updatedPassengers,
+        passengers: flight.passengers.map((p) =>
+          p.id === passengerId ? updatedPassenger : p
+        ),
       };
 
-      // Update the flight data on the server
       const putResponse = await fetch(
         `http://localhost:3000/flights/${flightId}`,
         {
@@ -510,9 +491,8 @@ export const updatePassportDetails = (
         throw new Error("Failed to update flight data");
       }
 
-      // Dispatch action to update state in Redux store
       dispatch({
-        type: UPDATE_PASSENGER_NAME,
+        type: UPDATE_PASSPORT_DETAILS,
         payload: {
           flightId,
           passengerId,

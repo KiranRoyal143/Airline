@@ -72,9 +72,6 @@ const CheckIn = ({ selectedFlight, onBack }) => {
           ))}
         </div>
       )}
-      <div>
-        <button onClick={onBack}>Back</button>
-      </div>
     </div>
   );
 };

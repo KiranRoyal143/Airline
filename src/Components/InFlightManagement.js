@@ -7,6 +7,7 @@ import {
   changeMealPreference,
   addInFlightShopRequest,
 } from "../store/actions/flightsActions";
+import "./staffDashboard/StaffDashboard.css"
 
 const InFlightManagement = ({ selectedFlight, onBack }) => {
   const dispatch = useDispatch();
@@ -28,11 +29,11 @@ const InFlightManagement = ({ selectedFlight, onBack }) => {
   };
 
   return (
-    <div>
-      <h2>In-Flight Management</h2>
+    <div className="in-flight">
+      <h1>In-Flight Management</h1>
       <div>
         <h3>Flight Details</h3>
-        <h2>Selected Flight: {selectedFlight.flightNumber}</h2>
+        <h3>Selected Flight: {selectedFlight.flightNumber}</h3>
         <h3>Schedule Time: {selectedFlight.scheduleTime}</h3>
       </div>
       <div>
@@ -53,9 +54,6 @@ const InFlightManagement = ({ selectedFlight, onBack }) => {
             onAddInFlightShopRequest={handleAddInFlightShopRequest}
           />
         ))}
-      </div>
-      <div>
-        <button onClick={onBack}>Back</button>
       </div>
     </div>
   );
