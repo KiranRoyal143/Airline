@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SeatMap from "./SeatMap";
 import PassengerList from "./PassengerList";
 import PassengerDetails from "./PassengerDetails";
@@ -72,9 +72,6 @@ const CheckIn = ({ selectedFlight, onBack }) => {
           ))}
         </div>
       )}
-      <div>
-        <button onClick={onBack}>Back</button>
-      </div>
     </div>
   );
 };

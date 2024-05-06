@@ -1,9 +1,10 @@
 import React from "react";
+import "./Home.css"
 
 function Home() {
   return (
-    <div>
-      <h1>Welcome to the Airline Services</h1>
+    <div className="home-page">
+      <h1 className="header-name">Welcome to the Airline Services</h1>
       <p>
         Air travel has proved to be one of the most comfortable travels among
         the provided options hence giving a boost to the airline industry’s
