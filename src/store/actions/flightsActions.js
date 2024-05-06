@@ -15,6 +15,9 @@ export const CHANGE_MEAL_PREFERENCE = "CHANGE_MEAL_PREFERENCE";
 export const UPDATE_PASSENGER_NAME = "UPDATE_PASSENGER_NAME";
 export const UPDATE_PASSPORT_DETAILS = "UPDATE_PASSPORT_DETAILS";
 export const UPDATE_ADDRESS_DETAILS = "UPDATE_ADDRESS_DETAILS";
+export const UPDATE_ANCILLARY_SERVICES = "UPDATE_ANCILLARY_SERVICES";
+export const UPDATE_SPECIAL_MEALS = "UPDATE_SPECIAL_MEALS";
+export const UPDATE_SHOPPING_ITEMS = "UPDATE_SHOPPING_ITEMS";
 
 // Action creators
 export const fetchFlightsSuccess = (flights) => ({
@@ -25,11 +28,6 @@ export const fetchFlightsSuccess = (flights) => ({
 export const fetchFlightsFailure = (error) => ({
   type: FETCH_FLIGHTS_FAILURE,
   payload: error,
-});
-
-export const deleteAncillaryService = (flightId, service) => ({
-  type: DELETE_ANCILLARY_SERVICE,
-  payload: { flightId, service },
 });
 
 export const updatePassengerDetails = (
@@ -561,6 +559,246 @@ export const updateAddressDetails = (
       });
     } catch (error) {
       console.error("Error Address details service:", error);
+    }
+  };
+};
+export const updateAncillaryServices = (
+  flightId,
+  passengerId,
+  updatedAncillaryServices
+) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      const passenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (!passenger) {
+        throw new Error("Passenger not found");
+      }
+
+      const updatedPassenger = {
+        ...passenger,
+        ancillaryServices: [
+          ...passenger.ancillaryServices,
+          updatedAncillaryServices,
+        ],
+      };
+
+      const updatedFlight = {
+        ...flight,
+        passengers: flight.passengers.map((p) =>
+          p.id === passengerId ? updatedPassenger : p
+        ),
+      };
+
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+
+      dispatch({
+        type: UPDATE_ANCILLARY_SERVICES,
+        payload: {
+          flightId,
+          passengerId,
+          updatedAncillaryServices,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating passenger ancillary Service:", error);
+    }
+  };
+};
+
+export const updateSpecialMeals = (flightId, passengerId, updatedMeals) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      const passenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (!passenger) {
+        throw new Error("Passenger not found");
+      }
+
+      const updatedPassenger = {
+        ...passenger,
+        mealPreference: updatedMeals,
+      };
+
+      const updatedFlight = {
+        ...flight,
+        passengers: flight.passengers.map((p) =>
+          p.id === passengerId ? updatedPassenger : p
+        ),
+      };
+
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+
+      dispatch({
+        type: UPDATE_SPECIAL_MEALS,
+        payload: {
+          flightId,
+          passengerId,
+          updatedMeals,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating passenger special meals:", error);
+    }
+  };
+};
+
+export const updateShoppingItems = (
+  flightId,
+  passengerId,
+  updatedShoppingItem
+) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      const passenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (!passenger) {
+        throw new Error("Passenger not found");
+      }
+
+      const updatedPassenger = {
+        ...passenger,
+        inFlightShopRequests: [
+          ...passenger.inFlightShopRequests,
+          updatedShoppingItem,
+        ],
+      };
+
+      const updatedFlight = {
+        ...flight,
+        passengers: flight.passengers.map((p) =>
+          p.id === passengerId ? updatedPassenger : p
+        ),
+      };
+
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+
+      dispatch({
+        type: UPDATE_SHOPPING_ITEMS,
+        payload: {
+          flightId,
+          passengerId,
+          updatedShoppingItem,
+        },
+      });
+    } catch (error) {
+      console.error("Error updating passenger Shopping Items:", error);
+    }
+  };
+};
+
+export const deleteAncillaryService = (flightId, passengerId, service) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      // Find the passenger by ID
+      const passenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (!passenger) {
+        throw new Error("Passenger not found");
+      }
+
+      // Filter out the specified service from ancillary services
+      const updatedAncillaryServices = passenger.ancillaryServices.filter(
+        (ancService) => ancService !== service
+      );
+
+      // Prepare DELETE request to remove the ancillary service
+      const deleteResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}/passengers/${passengerId}/services/${encodeURIComponent(
+          service
+        )}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // If your API requires a body for DELETE (though typically it does not), include an empty object
+          body: JSON.stringify({}),
+        }
+      );
+
+      if (!deleteResponse.ok) {
+        throw new Error("Failed to delete ancillary service");
+      }
+
+      // Dispatch action to indicate successful deletion of ancillary service
+      dispatch({
+        type: DELETE_ANCILLARY_SERVICE,
+        payload: { flightId, passengerId, updatedAncillaryServices },
+      });
+    } catch (error) {
+      console.error("Error deleting ancillary service:", error);
     }
   };
 };

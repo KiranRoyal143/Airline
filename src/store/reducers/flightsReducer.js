@@ -10,6 +10,10 @@ import {
   UPDATE_PASSENGER_NAME,
   UPDATE_PASSPORT_DETAILS,
   UPDATE_ADDRESS_DETAILS,
+  UPDATE_ANCILLARY_SERVICES,
+  UPDATE_SPECIAL_MEALS,
+  UPDATE_SHOPPING_ITEMS,
+  DELETE_ANCILLARY_SERVICE,
 } from "../actions/flightsActions";
 
 const initialState = {
@@ -183,6 +187,99 @@ const flightsReducer = (state = initialState, action) => {
                   return {
                     ...passenger,
                     address: action.payload.updatedAdressDetails,
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+    case UPDATE_ANCILLARY_SERVICES:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    ancillaryServices: [
+                      ...passenger.ancillaryServices,
+                      action.payload.updatedAncillaryServices,
+                    ],
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+    case UPDATE_SPECIAL_MEALS:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    mealPreference: action.payload.updatedMeals,
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+    case UPDATE_SHOPPING_ITEMS:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    inFlightShopRequests: [
+                      ...passenger.inFlightShopRequests,
+                      action.payload.updatedShoppingItem,
+                    ],
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+    case DELETE_ANCILLARY_SERVICE:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    ancillaryServices: [
+                      ...passenger.ancillaryServices,
+                      action.payload.updatedAncillaryServices,
+                    ],
                   };
                 }
                 return passenger;

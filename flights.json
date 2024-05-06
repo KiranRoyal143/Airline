@@ -9,17 +9,16 @@
           "id": 1,
           "name": "Daniel",
           "ancillaryServices": [
-            "Extra Legroom",
             "In-flight Meal",
-            "Meals",
-            "Chocolate"
+            "Meals"
           ],
-          "mealPreference": "No Meal",
+          "mealPreference": "Meal",
           "inFlightShopRequests": [
             "Chockolates",
             "Wine",
             "Bag",
-            "Laptop"
+            "Laptop",
+            "Battery"
           ],
           "seatNumber": "A",
           "isCheckedIn": true,

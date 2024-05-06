@@ -5,11 +5,16 @@ import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList, faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
 import ManagePassengers from "../adminDashboard/ManagePassengers";
-import ManageAncillaryServices from "../adminDashboard/ManageAncillaryServices";
+import ManageBasicServices from "./ManageBasicServices";
+import ManageAncillaryServices from "./ManageAncillaryServices";
 import {
   updatePassportDetails,
   updatePassengerName,
   updateAddressDetails,
+  updateAncillaryServices,
+  updateSpecialMeals,
+  updateShoppingItems,
+  deleteAncillaryService,
 } from "../../store/actions/flightsActions";
 import "./Navigation.css";
 
@@ -45,7 +50,26 @@ const Navigation = ({ onSelectOption, selectedOption, selectedFlight }) => {
       )
     );
   };
-
+  const handleAncillaryServices = (passengerId, updatedAncillaryServices) => {
+    dispatch(
+      updateAncillaryServices(
+        selectedFlight.id,
+        passengerId,
+        updatedAncillaryServices
+      )
+    );
+  };
+  const handleSpecialMeals = (passengerId, updatedMeals) => {
+    dispatch(updateSpecialMeals(selectedFlight.id, passengerId, updatedMeals));
+  };
+  const handleShoppingItems = (passengerId, updatedShoppingItem) => {
+    dispatch(
+      updateShoppingItems(selectedFlight.id, passengerId, updatedShoppingItem)
+    );
+  };
+  const handleDeleteAncillaryServices = (passengerId, service) => {
+    dispatch(deleteAncillaryService(selectedFlight.id, passengerId, service));
+  };
   return (
     <div className="admin-dashboard-container">
       <div className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}>
@@ -71,6 +95,14 @@ const Navigation = ({ onSelectOption, selectedOption, selectedFlight }) => {
                 <li>
                   <button
                     className="side-button"
+                    onClick={() => onSelectOption("basicServices")}
+                  >
+                    Manage Basic Services
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="side-button"
                     onClick={() => onSelectOption("ancillaryServices")}
                   >
                     Manage Ancillary Services
@@ -85,15 +117,27 @@ const Navigation = ({ onSelectOption, selectedOption, selectedFlight }) => {
         {selectedOption === "passengers" && (
           <ManagePassengers selectedFlight={selectedFlight} />
         )}
-        {selectedOption === "ancillaryServices" &&
+        {selectedOption === "basicServices" &&
           selectedFlight.passengers.map((passenger) => (
-            <ManageAncillaryServices
+            <ManageBasicServices
               key={passenger.id}
               passengerId={passenger.id}
               flightId={selectedFlight.id}
               onUpdateNameDetails={handleNameDetails}
               onUpdatePassportDetails={handlePassportDetails}
               onUpdateAddressDetails={handleAddressDetails}
+            />
+          ))}
+        {selectedOption === "ancillaryServices" &&
+          selectedFlight.passengers.map((passenger) => (
+            <ManageAncillaryServices
+              key={passenger.id}
+              passengerId={passenger.id}
+              flightId={selectedFlight.id}
+              onUpdateAncillaryServices={handleAncillaryServices}
+              onUpdateSpecialMeals={handleSpecialMeals}
+              onUpdateShoppingItems={handleShoppingItems}
+              onDeleteAncillaryService={handleDeleteAncillaryServices}
             />
           ))}
       </div>
