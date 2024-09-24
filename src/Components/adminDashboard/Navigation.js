@@ -1,75 +1,42 @@
-// Navigation.js
-
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
-import ManagePassengers from "../adminDashboard/ManagePassengers";
-import ManageBasicServices from "./ManageBasicServices";
+import { faAngleDoubleLeft, faList } from "@fortawesome/free-solid-svg-icons";
+import AddPassenger from "./AddPassenger";
+import UpdatePassengerDetails from "./UpdatePassengerDetails";
 import ManageAncillaryServices from "./ManageAncillaryServices";
-import {
-  updatePassportDetails,
-  updatePassengerName,
-  updateAddressDetails,
-  updateAncillaryServices,
-  updateSpecialMeals,
-  updateShoppingItems,
-  deleteAncillaryService,
-} from "../../store/actions/flightsActions";
-import "./Navigation.css";
+import FilterPassengers from "./FilterPassengers";
+import DeletePassenger from "./DeletePassenger";
+import ManageSpecialMeals from "./ManageSpecialMeals";
+import ManageShoppingItems from "./ManageShoppingItems";
 
-const Navigation = ({ onSelectOption, selectedOption, selectedFlight }) => {
+const Navigation = ({
+  selectedFlight,
+  updatePassengerName,
+  handlePassportDetails,
+  handleAddressDetails,
+  handleAncillaryServices,
+  handleSpecialMeals,
+  handleDeleteAncillaryServices,
+  handleShoppingItems,
+  handleDeleteShoppingItem,
+}) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const dispatch = useDispatch();
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [subOption, setSubOption] = useState(null);
 
   const toggleSidebar = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const handleNameDetails = (passengerId, updatedNameDetails) => {
-    dispatch(
-      updatePassengerName(selectedFlight.id, passengerId, updatedNameDetails)
-    );
+  const onSelectOption = (option) => {
+    setSelectedOption((prevOption) => (prevOption === option ? null : option));
+    setSubOption(null);
   };
 
-  const handlePassportDetails = (passengerId, updatedPassportDetails) => {
-    dispatch(
-      updatePassportDetails(
-        selectedFlight.id,
-        passengerId,
-        updatedPassportDetails
-      )
-    );
+  const onSelectSubOption = (subOption) => {
+    setSubOption(subOption);
   };
-  const handleAddressDetails = (passengerId, updatedAddressDetails) => {
-    dispatch(
-      updateAddressDetails(
-        selectedFlight.id,
-        passengerId,
-        updatedAddressDetails
-      )
-    );
-  };
-  const handleAncillaryServices = (passengerId, updatedAncillaryServices) => {
-    dispatch(
-      updateAncillaryServices(
-        selectedFlight.id,
-        passengerId,
-        updatedAncillaryServices
-      )
-    );
-  };
-  const handleSpecialMeals = (passengerId, updatedMeals) => {
-    dispatch(updateSpecialMeals(selectedFlight.id, passengerId, updatedMeals));
-  };
-  const handleShoppingItems = (passengerId, updatedShoppingItem) => {
-    dispatch(
-      updateShoppingItems(selectedFlight.id, passengerId, updatedShoppingItem)
-    );
-  };
-  const handleDeleteAncillaryServices = (passengerId, service) => {
-    dispatch(deleteAncillaryService(selectedFlight.id, passengerId, service));
-  };
+
   return (
     <div className="admin-dashboard-container">
       <div className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}>
@@ -82,62 +49,141 @@ const Navigation = ({ onSelectOption, selectedOption, selectedFlight }) => {
         </div>
         {isExpanded && (
           <div className="options">
-            <div>
-              <ul>
-                <li>
-                  <button
-                    className="side-button"
-                    onClick={() => onSelectOption("passengers")}
-                  >
-                    Manage Passengers
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="side-button"
-                    onClick={() => onSelectOption("basicServices")}
-                  >
-                    Manage Basic Services
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="side-button"
-                    onClick={() => onSelectOption("ancillaryServices")}
-                  >
-                    Manage Ancillary Services
-                  </button>
-                </li>
-              </ul>
-            </div>
+            <ul>
+              <li>
+                <button
+                  className="side-button"
+                  onClick={() => onSelectOption("basicServices")}
+                >
+                  Manage Passengers
+                </button>
+                {selectedOption === "basicServices" && (
+                  <ul className="sub-options">
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() => onSelectSubOption("addPassenger")}
+                      >
+                        Add Passenger
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() => onSelectSubOption("updatePassenger")}
+                      >
+                        Update Passenger
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() => onSelectSubOption("filterPassengers")}
+                      >
+                        Filter Passengers
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() => onSelectSubOption("deletePassenger")}
+                      >
+                        Delete Passengers
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li>
+                <button
+                  className="side-button"
+                  onClick={() => onSelectOption("ancillaryServices")}
+                >
+                  Manage Ancillary Services
+                </button>
+                {selectedOption === "ancillaryServices" && (
+                  <ul className="sub-options">
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() =>
+                          onSelectSubOption("manageAncillaryServices")
+                        }
+                      >
+                        Add/Update/Delete Ancillary Service
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() => onSelectSubOption("manageSpecialMeals")}
+                      >
+                        Add/Update/Delete Special Meals
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="side-button"
+                        onClick={() => onSelectSubOption("manageShoppingItems")}
+                      >
+                        Add/Update/Delete Shopping Items
+                      </button>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
           </div>
         )}
       </div>
       <div className="option-content">
-        {selectedOption === "passengers" && (
-          <ManagePassengers selectedFlight={selectedFlight} />
+        {subOption === "addPassenger" && (
+          <AddPassenger selectedFlight={selectedFlight} />
         )}
-        {selectedOption === "basicServices" &&
+        {subOption === "updatePassenger" &&
           selectedFlight.passengers.map((passenger) => (
-            <ManageBasicServices
+            <UpdatePassengerDetails
               key={passenger.id}
               passengerId={passenger.id}
               flightId={selectedFlight.id}
-              onUpdateNameDetails={handleNameDetails}
+              onUpdateNameDetails={updatePassengerName}
               onUpdatePassportDetails={handlePassportDetails}
               onUpdateAddressDetails={handleAddressDetails}
             />
           ))}
-        {selectedOption === "ancillaryServices" &&
+        {subOption === "filterPassengers" && (
+          <FilterPassengers selectedFlight={selectedFlight} />
+        )}
+        {subOption === "deletePassenger" && (
+          <DeletePassenger selectedFlight={selectedFlight.id} />
+        )}
+        {subOption === "manageAncillaryServices" &&
           selectedFlight.passengers.map((passenger) => (
             <ManageAncillaryServices
               key={passenger.id}
               passengerId={passenger.id}
               flightId={selectedFlight.id}
               onUpdateAncillaryServices={handleAncillaryServices}
-              onUpdateSpecialMeals={handleSpecialMeals}
-              onUpdateShoppingItems={handleShoppingItems}
               onDeleteAncillaryService={handleDeleteAncillaryServices}
+            />
+          ))}
+        {subOption === "manageSpecialMeals" &&
+          selectedFlight.passengers.map((passenger) => (
+            <ManageSpecialMeals
+              key={passenger.id}
+              passengerId={passenger.id}
+              flightId={selectedFlight.id}
+              onUpdateSpecialMeals={handleSpecialMeals}
+            />
+          ))}
+        {subOption === "manageShoppingItems" &&
+          selectedFlight.passengers.map((passenger) => (
+            <ManageShoppingItems
+              key={passenger.id}
+              passengerId={passenger.id}
+              flightId={selectedFlight.id}
+              onUpdateShoppingItems={handleShoppingItems}
+              onDeleteShoppingItem={handleDeleteShoppingItem}
             />
           ))}
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 
-const ManagePassengers = ({ selectedFlight }) => {
+const FilterPassengers = ({ selectedFlight }) => {
   const passengers = useSelector(
     (state) =>
       state.flights.flights.find((flight) => flight.id === selectedFlight.id)
@@ -62,4 +62,4 @@ const ManagePassengers = ({ selectedFlight }) => {
   );
 };
 
-export default ManagePassengers;
+export default FilterPassengers;

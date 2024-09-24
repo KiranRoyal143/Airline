@@ -16,9 +16,7 @@ const FlightList = ({ onSelectFlight }) => {
 
   const handleSelectChange = (event) => {
     const selectedFlightId = event.target.value;
-    const flight = flights.find(
-      (flight) => flight.id === parseInt(selectedFlightId, 10)
-    );
+    const flight = flights.find((flight) => flight.id === selectedFlightId);
     if (flight) {
       setSelectedFlight(flight);
       // Assuming passengers are stored in the flight object
@@ -39,7 +37,10 @@ const FlightList = ({ onSelectFlight }) => {
         ))}
       </select>
       {selectedFlight && (
-        <SeatMap passengers={passengers} onSeatSelect={(selectedPassenger) => console.log(selectedPassenger)} />
+        <SeatMap
+          passengers={passengers}
+          onSeatSelect={(selectedPassenger) => console.log(selectedPassenger)}
+        />
       )}
     </div>
   );

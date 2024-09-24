@@ -89,7 +89,8 @@
   margin-top: 14px;
 }
 .psname {
-  width: 300px;
+  width: 400px;
+  text-align: justify;
 }
 button {
   height: 28px;

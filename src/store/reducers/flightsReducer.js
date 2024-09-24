@@ -14,6 +14,9 @@ import {
   UPDATE_SPECIAL_MEALS,
   UPDATE_SHOPPING_ITEMS,
   DELETE_ANCILLARY_SERVICE,
+  ADD_PASSENGER,
+  DELETE_PASSENGER,
+  DELETE_SHOPPING_ITEM,
 } from "../actions/flightsActions";
 
 const initialState = {
@@ -136,23 +139,18 @@ const flightsReducer = (state = initialState, action) => {
     case UPDATE_PASSENGER_NAME:
       return {
         ...state,
-        flights: state.flights.map((flight) => {
-          if (flight.id === action.payload.flightId) {
-            return {
-              ...flight,
-              passengers: flight.passengers.map((passenger) => {
-                if (passenger.id === action.payload.passengerId) {
-                  return {
-                    ...passenger,
-                    name: action.payload.newName,
-                  };
-                }
-                return passenger;
-              }),
-            };
-          }
-          return flight;
-        }),
+        flights: state.flights.map((flight) =>
+          flight.id === action.payload.flightId.toString()
+            ? {
+                ...flight,
+                passengers: flight.passengers.map((p) =>
+                  p.id === Number(action.payload.passengerId)
+                    ? { ...p, name: action.payload.newName }
+                    : p
+                ),
+              }
+            : flight
+        ),
       };
     case UPDATE_PASSPORT_DETAILS:
       return {
@@ -178,23 +176,21 @@ const flightsReducer = (state = initialState, action) => {
     case UPDATE_ADDRESS_DETAILS:
       return {
         ...state,
-        flights: state.flights.map((flight) => {
-          if (flight.id === action.payload.flightId) {
-            return {
-              ...flight,
-              passengers: flight.passengers.map((passenger) => {
-                if (passenger.id === action.payload.passengerId) {
-                  return {
-                    ...passenger,
-                    address: action.payload.updatedAdressDetails,
-                  };
-                }
-                return passenger;
-              }),
-            };
-          }
-          return flight;
-        }),
+        flights: state.flights.map((flight) =>
+          flight.id === action.payload.flightId.toString()
+            ? {
+                ...flight,
+                passengers: flight.passengers.map((passenger) =>
+                  passenger.id === Number(action.payload.passengerId)
+                    ? {
+                        ...passenger,
+                        address: action.payload.updatedAddressDetails,
+                      }
+                    : passenger
+                ),
+              }
+            : flight
+        ),
       };
     case UPDATE_ANCILLARY_SERVICES:
       return {
@@ -276,10 +272,63 @@ const flightsReducer = (state = initialState, action) => {
                 if (passenger.id === action.payload.passengerId) {
                   return {
                     ...passenger,
-                    ancillaryServices: [
-                      ...passenger.ancillaryServices,
-                      action.payload.updatedAncillaryServices,
-                    ],
+                    // Use the updated ancillary services array directly
+                    ancillaryServices: action.payload.updatedAncillaryServices,
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+
+    case ADD_PASSENGER:
+      return {
+        ...state,
+        flights: state.flights.map((flight) =>
+          flight.id === action.payload.flightId
+            ? {
+                ...flight,
+                passengers: [...flight.passengers, action.payload.passenger],
+              }
+            : flight
+        ),
+      };
+    case DELETE_PASSENGER:
+      console.log("DELETE_PASSENGER action payload:", action.payload);
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            console.log("Updating flight:", flight);
+            return {
+              ...flight,
+              passengers: flight.passengers.filter(
+                (passenger) =>
+                  passenger.id.toString() !== action.payload.passengerId
+              ),
+            };
+          }
+          return flight;
+        }),
+      };
+    case DELETE_SHOPPING_ITEM:
+      console.log("DELETE_SHOPPING_ITEM action payload:", action.payload);
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            console.log("Updating flight:", flight);
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  console.log("Updating passenger:", passenger);
+                  return {
+                    ...passenger,
+                    inFlightShopRequests: action.payload.updatedShoppingItems,
                   };
                 }
                 return passenger;

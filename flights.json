@@ -1,16 +1,17 @@
 {
   "flights": [
     {
-      "id": 1,
+      "id": "1",
       "flightNumber": "ABC123",
       "scheduleTime": "2024-07-24 10:00",
       "passengers": [
         {
           "id": 1,
-          "name": "Daniel",
+          "name": "Jack",
           "ancillaryServices": [
             "In-flight Meal",
-            "Meals"
+            "Meals",
+            "Chocolate"
           ],
           "mealPreference": "Meal",
           "inFlightShopRequests": [
@@ -87,95 +88,10 @@
           "address": "India",
           "dob": ""
         }
-      ],
-      "passenger": [
-        {
-          "id": 1,
-          "name": "Jack",
-          "ancillaryServices": [
-            "Extra Legroom",
-            "In-flight Meal",
-            "Meals",
-            "Chocolate"
-          ],
-          "mealPreference": "No Meal",
-          "inFlightShopRequests": [
-            "Chockolates",
-            "Wine",
-            "Bag",
-            "Laptop"
-          ],
-          "seatNumber": "A",
-          "isCheckedIn": true,
-          "requiresWheelchair": false,
-          "hasInfant": false,
-          "passport": "Available",
-          "address": "India",
-          "dob": "24-08-2000"
-        },
-        {
-          "id": 2,
-          "name": "Jane Smith",
-          "ancillaryServices": [
-            "Priority Boarding",
-            "In-flight Meal"
-          ],
-          "mealPreference": "No - Meal",
-          "inFlightShopRequests": [
-            "Bags",
-            "Shoes"
-          ],
-          "seatNumber": "B",
-          "isCheckedIn": false,
-          "requiresWheelchair": true,
-          "hasInfant": false,
-          "passport": "Available",
-          "address": "America",
-          "dob": "24-08-1999"
-        },
-        {
-          "id": 3,
-          "name": "Jack Ryan",
-          "ancillaryServices": [
-            "Priority Boarding"
-          ],
-          "mealPreference": "No - Meal",
-          "inFlightShopRequests": [
-            "Chockolates",
-            "Wine"
-          ],
-          "seatNumber": "C",
-          "isCheckedIn": false,
-          "requiresWheelchair": true,
-          "hasInfant": true,
-          "passport": "Available",
-          "address": "",
-          "dob": "24-08-2000"
-        },
-        {
-          "id": 4,
-          "name": "Dane Smith",
-          "ancillaryServices": [
-            "Priority Boarding",
-            "In-flight Meal"
-          ],
-          "mealPreference": "In-flight Meal",
-          "inFlightShopRequests": [
-            "Bag",
-            "Shoes"
-          ],
-          "seatNumber": "D",
-          "isCheckedIn": true,
-          "requiresWheelchair": true,
-          "hasInfant": false,
-          "passport": "Available",
-          "address": "India",
-          "dob": ""
-        }
       ]
     },
     {
-      "id": 2,
+      "id": "2",
       "flightNumber": "ABC1234",
       "scheduleTime": "2024-07-24 11:00",
       "passengers": [
