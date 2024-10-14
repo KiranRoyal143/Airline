@@ -8,7 +8,7 @@ const AddPassenger = ({ selectedFlight }) => {
   const [address, setAddress] = useState("");
   const [dob, setDob] = useState("");
   const [ancillaryServices, setAncillaryServices] = useState([]);
-  const [mealPreference, setMealPreference] = useState("");
+  const [mealPreference, setMealPreference] = useState([]);
   const [inFlightShopRequests, setInFlightShopRequests] = useState([]);
   const [seatNumber, setSeatNumber] = useState("");
   const [isCheckedIn, setIsCheckedIn] = useState(false);
@@ -18,7 +18,7 @@ const AddPassenger = ({ selectedFlight }) => {
 
   const handleAddPassenger = () => {
     const newPassenger = {
-      id: Date.now(), // Unique ID for the new passenger
+      id: Date.now(),
       name,
       passport,
       address,
@@ -37,7 +37,7 @@ const AddPassenger = ({ selectedFlight }) => {
     setAddress("");
     setDob("");
     setAncillaryServices([]);
-    setMealPreference("");
+    setMealPreference([]);
     setInFlightShopRequests([]);
     setSeatNumber("");
     setIsCheckedIn(false);
@@ -87,35 +87,70 @@ const AddPassenger = ({ selectedFlight }) => {
         </div>
         <div>
           <label>Ancillary Services:</label>
-          <input
-            type="text"
+          <select
             value={ancillaryServices}
-            onChange={(e) => setAncillaryServices(e.target.value.split(","))}
-          />
+            onChange={(e) => setAncillaryServices([e.target.value])}
+          >
+            <option value="" disabled>
+              Select Ancillary Service
+            </option>
+            {selectedFlight.ancillaryServices.map((service, index) => (
+              <option key={index} value={service}>
+                {service}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Meal Preference:</label>
-          <input
-            type="text"
+          <select
             value={mealPreference}
-            onChange={(e) => setMealPreference(e.target.value)}
-          />
+            onChange={(e) => setMealPreference([e.target.value])}
+          >
+            <option value="" disabled>
+              Select Meal Preference
+            </option>
+            {selectedFlight.meals.map((meal, index) => (
+              <option key={index} value={meal}>
+                {meal}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>In-Flight Shop Requests:</label>
-          <input
-            type="text"
+          <select
             value={inFlightShopRequests}
-            onChange={(e) => setInFlightShopRequests(e.target.value.split(","))}
-          />
+            onChange={(e) => setInFlightShopRequests([e.target.value])}
+          >
+            <option value="" disabled>
+              Select In-Flight Shopping Items
+            </option>
+            {selectedFlight.shoppingItems.map((item, index) => (
+              <option key={index} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <label>Seat Number:</label>
-          <input
-            type="text"
+          <select
             value={seatNumber}
-            onChange={(e) => setSeatNumber(e.target.value)}
-          />
+            onChange={(e) => setSeatNumber([e.target.value])}
+          >
+            <option value="" disabled>
+              Select Seat
+            </option>
+            {selectedFlight.seatLayout
+              .flat()
+              .filter((seat) => seat)
+              .map((seat, index) => (
+                <option key={index} value={seat}>
+                  {seat}
+                </option>
+              ))}
+          </select>
         </div>
         <div>
           <label>Checked In:</label>

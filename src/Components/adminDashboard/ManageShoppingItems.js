@@ -55,13 +55,20 @@ const ManageShoppingItems = ({
               ))}
             </span>
           </p>
-          <input
-            type="text"
-            placeholder="Shopping Items"
+          <select
+            className="texts"
             value={newShoppingItems}
             onChange={(e) => setNewShoppingItems(e.target.value)}
-            className="texts"
-          />
+          >
+            <option value="" disabled>
+              Select Shopping Items to Add/Update
+            </option>
+            {flight.shoppingItems.map((item, index) => (
+              <option key={index} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
           <button onClick={updateShoppingItems}>
             Add/Update Shopping Items
           </button>
