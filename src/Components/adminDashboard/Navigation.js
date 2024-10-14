@@ -16,6 +16,7 @@ const Navigation = ({
   handleAddressDetails,
   handleAncillaryServices,
   handleSpecialMeals,
+  handleDeleteSpecialMeals,
   handleDeleteAncillaryServices,
   handleShoppingItems,
   handleDeleteShoppingItem,
@@ -174,6 +175,7 @@ const Navigation = ({
               passengerId={passenger.id}
               flightId={selectedFlight.id}
               onUpdateSpecialMeals={handleSpecialMeals}
+              onDeleteSpecialMeals={handleDeleteSpecialMeals}
             />
           ))}
         {subOption === "manageShoppingItems" &&

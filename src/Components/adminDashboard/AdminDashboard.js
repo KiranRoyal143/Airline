@@ -8,6 +8,7 @@ import {
   updateAddressDetails,
   updateAncillaryServices,
   updateSpecialMeals,
+  deleteSpecialMeals,
   deleteAncillaryService,
   updateShoppingItems,
   deleteShoppingItem,
@@ -60,6 +61,10 @@ const AdminDashboard = () => {
     dispatch(updateSpecialMeals(flightId,passengerId, newSpecialMeals));
   };
 
+  const handleDeleteSpecialMeals = (flightId, passengerId, selectedMeal) => {
+    dispatch(deleteSpecialMeals(flightId, passengerId, selectedMeal));
+  };
+
   const handleDeleteAncillaryServices = (flightId, passengerId, serviceId) => {
     dispatch(deleteAncillaryService(flightId, passengerId, serviceId));
   };
@@ -90,6 +95,7 @@ const AdminDashboard = () => {
             handleAddressDetails={handleUpdateAddressDetails}
             handleAncillaryServices={handleAncillaryServices}
             handleSpecialMeals={handleSpecialMeals}
+            handleDeleteSpecialMeals={handleDeleteSpecialMeals}
             handleDeleteAncillaryServices={handleDeleteAncillaryServices}
             handleShoppingItems={handleShoppingItems}
             handleDeleteShoppingItem={handleDeleteShoppingItem}

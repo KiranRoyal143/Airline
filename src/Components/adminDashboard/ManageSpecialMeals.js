@@ -6,6 +6,7 @@ const ManageSpecialMeals = ({
   passengerId,
   flightId,
   onUpdateSpecialMeals,
+  onDeleteSpecialMeals,
 }) => {
   const flights = useSelector((state) => state.flights.flights);
   const flight = flights.find((flight) => flight.id === flightId);
@@ -16,6 +17,7 @@ const ManageSpecialMeals = ({
   );
 
   const [newSpecialMeals, setNewSpecialMeals] = useState("");
+  const [selectedMeal, setSelectedMeal] = useState("");
 
   const updateSpecialMeals = () => {
     if (newSpecialMeals.trim() !== "") {
@@ -23,32 +25,75 @@ const ManageSpecialMeals = ({
       setNewSpecialMeals("");
     }
   };
+
+  const handleDeleteSpecialMeals = () => {
+    if (selectedMeal) {
+      onDeleteSpecialMeals(flightId, selectedPassenger.id, selectedMeal);
+      setSelectedMeal("");
+    }
+  };
+
   return (
     <div className="passenger-content">
-      <p className="passgen-Details">
+      <div className="passgen-Details">
         <div className="mng">
           <p className="psname">
             <strong>Passenger Name:</strong>
             <span>{selectedPassenger.name}</span>
           </p>
         </div>
-      </p>
-      <p className="passgen-Details">
+      </div>
+      <div className="passgen-Details">
         <div className="mng">
           <p className="psname">
-            <strong>Special Meals:</strong>
-            {selectedPassenger.mealPreference}
+            <strong>Meal Preference:</strong>
+            <span>
+              {selectedPassenger.mealPreference.map((meal, index) => (
+                <span key={index}>
+                  <li>{meal}</li>
+                </span>
+              ))}
+            </span>
           </p>
-          <input
-            type="text"
-            placeholder="Meal Preference"
+          <select
+            className="texts"
             value={newSpecialMeals}
             onChange={(e) => setNewSpecialMeals(e.target.value)}
-            className="texts"
-          />
+          >
+            <option value="" disabled>
+              Select Special Meals to Add/Update
+            </option>
+            {flight.meals.map((meal, index) => (
+              <option key={index} value={meal}>
+                {meal}
+              </option>
+            ))}
+          </select>
           <button onClick={updateSpecialMeals}>Add/Update Special Meals</button>
         </div>
-      </p>
+      </div>
+      <div className="passgen-Details">
+        <div className="mng">
+          <p className="psname">
+            <strong>Select Meals to Delete:</strong>
+          </p>
+          <select
+            className="texts"
+            value={selectedMeal}
+            onChange={(e) => setSelectedMeal(e.target.value)}
+          >
+            <option value="">Select Special Meal</option>
+            {selectedPassenger.mealPreference.map((meal, index) => (
+              <option key={index} value={meal}>
+                {meal}
+              </option>
+            ))}
+          </select>
+          <button onClick={handleDeleteSpecialMeals}>
+            Delete Selected Meal
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

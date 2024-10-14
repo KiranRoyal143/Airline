@@ -58,13 +58,20 @@ const ManageAncillaryServices = ({
                 ))}
               </span>
             </p>
-            <input
-              type="text"
-              placeholder="Update/Add AncillaryServices"
+            <select
+              className="texts"
               value={newAncillaryService}
               onChange={(e) => setNewAncillaryService(e.target.value)}
-              className="texts"
-            />
+            >
+              <option value="" disabled>
+                Select Ancillary Service to Add/Update
+              </option>
+              {flight.ancillaryServices.map((service, index) => (
+                <option key={index} value={service}>
+                  {service}
+                </option>
+              ))}
+            </select>
             <button onClick={updateAncillaryServices}>
               Add/Update Ancillary Services
             </button>

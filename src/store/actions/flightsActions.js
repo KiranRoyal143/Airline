@@ -21,6 +21,7 @@ export const UPDATE_SHOPPING_ITEMS = "UPDATE_SHOPPING_ITEMS";
 export const ADD_PASSENGER = "ADD_PASSENGER";
 export const DELETE_PASSENGER = "DELETE_PASSENGER";
 export const DELETE_SHOPPING_ITEM = "DELETE_SHOPPING_ITEM";
+export const DELETE_MEAL_PREFERENCE = "DELETE_MEAL_PREFERENCE";
 
 // Action creators
 export const fetchFlightsSuccess = (flights) => ({
@@ -380,18 +381,21 @@ export const changeMealPreference = (
         throw new Error("Passenger not found");
       }
 
+      // Create a new updated passenger object
       const updatedPassenger = {
         ...passenger,
         mealPreference: newMealPreference,
       };
 
+      // Update the flight object with the modified passenger
       const updatedFlight = {
         ...flight,
-        passenger: flight.passengers.map((p) =>
+        passengers: flight.passengers.map((p) =>
           p.id === passengerId ? updatedPassenger : p
         ),
       };
 
+      // Send the updated flight data to the backend
       const putResponse = await fetch(
         `http://localhost:3000/flights/${flightId}`,
         {
@@ -406,6 +410,8 @@ export const changeMealPreference = (
       if (!putResponse.ok) {
         throw new Error("Failed to update flight data");
       }
+
+      // Dispatch action to update the Redux state
       dispatch({
         type: CHANGE_MEAL_PREFERENCE,
         payload: {
@@ -415,7 +421,7 @@ export const changeMealPreference = (
         },
       });
     } catch (error) {
-      console.error("Error adding ancillary service:", error);
+      console.error("Error changing meal preference:", error);
     }
   };
 };
@@ -773,7 +779,7 @@ export const updateSpecialMeals = (flightId, passengerId, updatedMeals) => {
 
       const updatedPassenger = {
         ...passenger,
-        mealPreference: updatedMeals,
+        mealPreference: [...passenger.mealPreference, updatedMeals],
       };
 
       const updatedFlight = {
@@ -1006,6 +1012,72 @@ export const deleteShoppingItem = (flightId, passengerId, selectedItem) => {
       });
     } catch (error) {
       console.error("Error deleting shopping item:", error);
+    }
+  };
+};
+
+export const deleteSpecialMeals = (flightId, passengerId, selectedMeal) => {
+  return async (dispatch) => {
+    try {
+      // Fetch the flight data
+      const response = await fetch(`http://localhost:3000/flights/${flightId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch flight data");
+      }
+      const flight = await response.json();
+
+      // Find the passenger by ID
+      const passenger = flight.passengers.find(
+        (passenger) => passenger.id === passengerId
+      );
+      if (!passenger) {
+        throw new Error("Passenger not found");
+      }
+
+      // Filter out the specified service from meal preferences
+      const updatedSpecialMeals = passenger.mealPreference.filter(
+        (meal) => meal !== selectedMeal
+      );
+
+      // Update the passenger's ancillary services
+      const updatedPassenger = {
+        ...passenger,
+        mealPreference: updatedSpecialMeals,
+      };
+
+      // Update the flight's passengers
+      const updatedPassengers = flight.passengers.map((p) =>
+        p.id === passengerId ? updatedPassenger : p
+      );
+
+      const updatedFlight = {
+        ...flight,
+        passengers: updatedPassengers,
+      };
+
+      // Update the flight on the server
+      const putResponse = await fetch(
+        `http://localhost:3000/flights/${flightId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedFlight),
+        }
+      );
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update flight data");
+      }
+
+      // Dispatch action to indicate successful deletion of special meals
+      dispatch({
+        type: DELETE_MEAL_PREFERENCE,
+        payload: { flightId, passengerId, updatedSpecialMeals },
+      });
+    } catch (error) {
+      console.error("Error deleting special meals:", error);
     }
   };
 };

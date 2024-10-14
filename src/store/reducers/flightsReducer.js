@@ -17,6 +17,7 @@ import {
   ADD_PASSENGER,
   DELETE_PASSENGER,
   DELETE_SHOPPING_ITEM,
+  DELETE_MEAL_PREFERENCE,
 } from "../actions/flightsActions";
 
 const initialState = {
@@ -68,7 +69,7 @@ const flightsReducer = (state = initialState, action) => {
       };
 
     case ADD_ANCILLARY_SERVICE:
-      return {
+      const newState = {
         ...state,
         flights: state.flights.map((flight) => {
           if (flight.id === action.payload.flightId) {
@@ -91,6 +92,8 @@ const flightsReducer = (state = initialState, action) => {
           return flight;
         }),
       };
+      return newState;
+
     case CHANGE_MEAL_PREFERENCE:
       return {
         ...state,
@@ -227,7 +230,10 @@ const flightsReducer = (state = initialState, action) => {
                 if (passenger.id === action.payload.passengerId) {
                   return {
                     ...passenger,
-                    mealPreference: action.payload.updatedMeals,
+                    mealPreference: [
+                      ...passenger.mealPreference,
+                      action.payload.updatedMeals,
+                    ],
                   };
                 }
                 return passenger;
@@ -338,6 +344,29 @@ const flightsReducer = (state = initialState, action) => {
           return flight;
         }),
       };
+    case DELETE_MEAL_PREFERENCE:
+      return {
+        ...state,
+        flights: state.flights.map((flight) => {
+          if (flight.id === action.payload.flightId) {
+            return {
+              ...flight,
+              passengers: flight.passengers.map((passenger) => {
+                if (passenger.id === action.payload.passengerId) {
+                  return {
+                    ...passenger,
+                    // Use the updated special meals array directly
+                    mealPreference: action.payload.updatedSpecialMeals,
+                  };
+                }
+                return passenger;
+              }),
+            };
+          }
+          return flight;
+        }),
+      };
+
     case UPDATE_PASSENGER_DETAILS:
       // Implement your logic for updating passenger details
       return state;
