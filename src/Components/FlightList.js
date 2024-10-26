@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchFlights } from "../store/actions/flightsActions";
-import SeatMap from "./SeatMap";
+import SeatMap from "./staffDashboard/SeatMap";
 
 const FlightList = ({ onSelectFlight }) => {
   const [selectedFlight, setSelectedFlight] = useState(null);
@@ -19,7 +19,6 @@ const FlightList = ({ onSelectFlight }) => {
     const flight = flights.find((flight) => flight.id === selectedFlightId);
     if (flight) {
       setSelectedFlight(flight);
-      // Assuming passengers are stored in the flight object
       setPassengers(flight.passengers);
       onSelectFlight(flight);
     }

@@ -39,13 +39,7 @@ const flightsReducer = (state = initialState, action) => {
         flights: [],
         error: action.payload,
       };
-    case UPDATE_FLIGHT:
-      return {
-        ...state,
-        flights: state.flights.map((flight) =>
-          flight.id === action.payload.id ? action.payload : flight
-        ),
-      };
+
     case CHANGE_PASSENGER_SEAT:
       return {
         ...state,
@@ -365,6 +359,13 @@ const flightsReducer = (state = initialState, action) => {
           }
           return flight;
         }),
+      };
+    case UPDATE_FLIGHT:
+      return {
+        ...state,
+        flights: state.flights.map((flight) =>
+          flight.id === action.payload.id ? action.payload : flight
+        ),
       };
 
     case UPDATE_PASSENGER_DETAILS:

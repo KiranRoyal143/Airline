@@ -1,8 +1,0 @@
-{
-  "/api/flights": "/flights",
-  "/api/flights/:id": "/flights/:id",
-  "/api/flights/:flightId/passengers": "/flights/:flightId/passengers",
-  "/api/flights/:flightId/passengers/:passengerId": "/flights/:flightId/passengers/:passengerId",
-  "/api/flights/:flightId/passengers/:passengerId/services": "/flights/:flightId/passengers/:passengerId/services",
-  "/api/flights/:flightId/passengers/:passengerId/services/:serviceId": "/flights/:flightId/passengers/:passengerId/services/:serviceId"
-}

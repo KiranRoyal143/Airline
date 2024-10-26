@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addPassenger } from "../../store/actions/flightsActions";
+import "./AddPassenger.css";
 
 const AddPassenger = ({ selectedFlight }) => {
   const [name, setName] = useState("");
@@ -15,6 +16,20 @@ const AddPassenger = ({ selectedFlight }) => {
   const [requiresWheelchair, setRequiresWheelchair] = useState(false);
   const [hasInfant, setHasInfant] = useState(false);
   const dispatch = useDispatch();
+
+  const passengers = useSelector(
+    (state) =>
+      state.flights.flights.find((flight) => flight.id === selectedFlight.id)
+        .passengers
+  );
+
+  const getAvailableSeats = () => {
+    const allSeats = selectedFlight.seatLayout
+      .flat()
+      .filter((seat) => seat !== "");
+    const assignedSeats = passengers.map((passenger) => passenger.seatNumber);
+    return allSeats.filter((seat) => !assignedSeats.includes(seat));
+  };
 
   const handleAddPassenger = () => {
     const newPassenger = {
@@ -137,19 +152,16 @@ const AddPassenger = ({ selectedFlight }) => {
           <label>Seat Number:</label>
           <select
             value={seatNumber}
-            onChange={(e) => setSeatNumber([e.target.value])}
+            onChange={(e) => setSeatNumber(e.target.value)}
           >
             <option value="" disabled>
               Select Seat
             </option>
-            {selectedFlight.seatLayout
-              .flat()
-              .filter((seat) => seat)
-              .map((seat, index) => (
-                <option key={index} value={seat}>
-                  {seat}
-                </option>
-              ))}
+            {getAvailableSeats().map((seat, index) => (
+              <option key={index} value={seat}>
+                {seat}
+              </option>
+            ))}
           </select>
         </div>
         <div>

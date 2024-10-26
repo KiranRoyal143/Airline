@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassengerSeat } from "../store/actions/flightsActions";
+import { changePassengerSeat } from "../../store/actions/flightsActions";
+import "../adminDashboard/Navigation.css"
 
 const PassengerList = ({ flightId }) => {
-  const passengers = useSelector(
-    (state) =>
-      state.flights.flights.find((flight) => flight.id === flightId).passengers
-  );
+  const flights = useSelector((state) => state.flights.flights);
+  const flight = flights.find((flight) => flight.id === flightId);
+  const passengers = flight.passengers;
   const [filter, setFilter] = useState("all");
   const [seatInputs, setSeatInputs] = useState({});
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ const PassengerList = ({ flightId }) => {
       );
       setSeatInputs({
         ...seatInputs,
-        [passengerId]: "", // Clear the input after changing the seat
+        [passengerId]: "",
       });
     }
   };
@@ -49,10 +49,17 @@ const PassengerList = ({ flightId }) => {
     });
   };
 
+  const getAvailableSeats = () => {
+    const allSeats = flight.seatLayout.flat().filter((seat) => seat !== "");
+    const assignedSeats = passengers.map((passenger) => passenger.seatNumber);
+    return allSeats.filter((seat) => !assignedSeats.includes(seat));
+  };
+
   const filteredPassengers = filterPassengers();
+  const availableSeats = getAvailableSeats();
 
   return (
-    <div>
+    <div className="passenger-content">
       <h2>Passenger List</h2>
       <div>
         Filter by:
@@ -72,9 +79,8 @@ const PassengerList = ({ flightId }) => {
             {passenger.ancillaryServices.join(", ")} |{" "}
             <strong>Seat Number:</strong> {passenger.seatNumber}
             <div>
-              <input
-                type="text"
-                placeholder="New Seat Number"
+              <select
+                className="select-dropdown"
                 value={seatInputs[passenger.id] || ""}
                 onChange={(e) =>
                   setSeatInputs({
@@ -82,7 +88,14 @@ const PassengerList = ({ flightId }) => {
                     [passenger.id]: e.target.value,
                   })
                 }
-              />
+              >
+                <option value="">Select New Seat</option>
+                {availableSeats.map((seat, index) => (
+                  <option key={index} value={seat}>
+                    {seat}
+                  </option>
+                ))}
+              </select>
               <button onClick={() => handleSeatChange(passenger.id)}>
                 Change Seat
               </button>

@@ -9,46 +9,40 @@ const UpdatePassengerDetails = ({
   onUpdatePassportDetails,
   onUpdateAddressDetails,
 }) => {
-  // Fetch flight data from the Redux store
   const flights = useSelector((state) => state.flights.flights);
-
-  // Load the flight whenever flights data changes
   const flight = flights.find((flight) => flight.id === flightId);
   const passengers = flight ? flight.passengers : [];
 
-  // Select the passenger
   const selectedPassenger = passengers.find(
     (passenger) => passenger.id === passengerId
   );
 
-  // State for new input values
+
   const [newName, setNewName] = useState("");
   const [newPassportDetails, setNewPassportDetails] = useState("");
   const [newAddressDetails, setNewAddressDetails] = useState("");
 
-  // Handle updates
   const updateName = () => {
     if (newName.trim() !== "") {
       onUpdateNameDetails(flightId, passengerId, newName.trim());
-      setNewName(""); // Clear input after updating
+      setNewName("");
     }
   };
 
   const updatePassportDetails = () => {
     if (newPassportDetails.trim() !== "") {
       onUpdatePassportDetails(flightId, passengerId, newPassportDetails.trim());
-      setNewPassportDetails(""); // Clear input after updating
+      setNewPassportDetails("");
     }
   };
 
   const updateAddressDetails = () => {
     if (newAddressDetails.trim() !== "") {
       onUpdateAddressDetails(flightId, passengerId, newAddressDetails.trim());
-      setNewAddressDetails(""); // Clear input after updating
+      setNewAddressDetails("");
     }
   };
 
-  // If passenger is not found, show a loading state
   if (!selectedPassenger) {
     return <div>Loading...</div>;
   }

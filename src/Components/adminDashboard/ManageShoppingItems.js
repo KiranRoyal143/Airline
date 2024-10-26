@@ -56,7 +56,7 @@ const ManageShoppingItems = ({
             </span>
           </p>
           <select
-            className="texts"
+            className="select-dropdown"
             value={newShoppingItems}
             onChange={(e) => setNewShoppingItems(e.target.value)}
           >
@@ -80,7 +80,7 @@ const ManageShoppingItems = ({
             <strong>Select Items to Delete:</strong>
           </p>
           <select
-            className="texts"
+            className="select-dropdown"
             value={selectedItem}
             onChange={(e) => setSelectedItem(e.target.value)}
           >

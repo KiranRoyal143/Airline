@@ -19,7 +19,7 @@ const PassengerDetails = ({ passengerId }) => {
   }
 
   return (
-    <div>
+    <div className="passenger-content">
       <h2>Passenger Details</h2>
       <p>
         <strong>Name:</strong> {passenger.name}

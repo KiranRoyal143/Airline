@@ -59,7 +59,7 @@ const ManageAncillaryServices = ({
               </span>
             </p>
             <select
-              className="texts"
+              className="select-dropdown"
               value={newAncillaryService}
               onChange={(e) => setNewAncillaryService(e.target.value)}
             >
@@ -83,7 +83,7 @@ const ManageAncillaryServices = ({
               <strong>Select Service to Delete:</strong>
             </p>
             <select
-              className="texts"
+              className="select-dropdown"
               value={selectedService}
               onChange={(e) => setSelectedService(e.target.value)}
             >
@@ -95,7 +95,10 @@ const ManageAncillaryServices = ({
               ))}
             </select>
 
-            <button onClick={handleDeleteAncillaryService}>
+            <button
+              className="select-dropdown"
+              onClick={handleDeleteAncillaryService}
+            >
               Delete Selected Service
             </button>
           </div>

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFlights } from "../../store/actions/flightsActions";
-import "./StaffNavigation.css";
+import "../adminDashboard/Navigation.css";
 
-const AddAncillaryServices = ({
+const InFlightShopping = ({
   passengers,
   flightId,
-  onUpdateAncillaryServices,
+  onAddInFlightShopRequest,
 }) => {
   const flights = useSelector((state) => state.flights.flights);
   const flight = flights.find((flight) => flight.id === flightId);
 
   const [selectedFlight, setSelectedFlight] = useState(flight);
   const [selectedPassenger, setSelectedPassenger] = useState(null);
-  const [newAncillaryService, setNewAncillaryService] = useState("");
+  const [newShopRequest, setNewShopRequest] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,23 +29,23 @@ const AddAncillaryServices = ({
     }
   }, [flights, selectedFlight]);
 
-  const updateAncillaryServices = () => {
-    if (newAncillaryService.trim() !== "" && selectedPassenger) {
-      onUpdateAncillaryServices(
+  const addInFlightShopRequest = () => {
+    if (newShopRequest.trim() !== "" && selectedPassenger) {
+      onAddInFlightShopRequest(
         flightId,
         selectedPassenger.id,
-        newAncillaryService.trim()
+        newShopRequest.trim()
       );
 
       const updatedPassenger = {
         ...selectedPassenger,
-        ancillaryServices: [
-          ...selectedPassenger.ancillaryServices,
-          newAncillaryService.trim(),
+        inFlightShopRequests: [
+          ...selectedPassenger.inFlightShopRequests,
+          newShopRequest.trim(),
         ],
       };
       setSelectedPassenger(updatedPassenger);
-      setNewAncillaryService("");
+      setNewShopRequest("");
     }
   };
 
@@ -79,39 +79,36 @@ const AddAncillaryServices = ({
         <div className="passgen-Details">
           <div className="mng">
             <div className="psname">
-              <strong>Passenger Name:</strong>
-              <span>{selectedPassenger.name}</span>
+              <strong>Name:</strong> <span>{selectedPassenger.name}</span>
             </div>
             <div className="psname">
-              <strong>Ancillary Services:</strong>
+              <strong>In-flight Shop Requests:</strong>
               <ul>
-                {selectedPassenger.ancillaryServices.length > 0 ? (
-                  selectedPassenger.ancillaryServices.map((service, index) => (
-                    <li key={index}>{service}</li>
-                  ))
+                {selectedPassenger.inFlightShopRequests.length > 0 ? (
+                  selectedPassenger.inFlightShopRequests.map(
+                    (service, index) => <li key={index}>{service}</li>
+                  )
                 ) : (
                   <li>No services added</li>
                 )}
               </ul>
             </div>
-
             <select
               className="texts"
-              value={newAncillaryService}
-              onChange={(e) => setNewAncillaryService(e.target.value)}
+              value={newShopRequest}
+              onChange={(e) => setNewShopRequest(e.target.value)}
             >
               <option value="" disabled>
-                Select Ancillary Service to Add
+                Select In Flight Shopping Item to Add
               </option>
-              {selectedFlight.ancillaryServices.map((service, index) => (
+              {selectedFlight.shoppingItems.map((service, index) => (
                 <option key={index} value={service}>
                   {service}
                 </option>
               ))}
             </select>
-
-            <button onClick={updateAncillaryServices}>
-              Add Ancillary Services
+            <button onClick={addInFlightShopRequest} className="btn">
+              Add Shop Request
             </button>
           </div>
         </div>
@@ -120,4 +117,4 @@ const AddAncillaryServices = ({
   );
 };
 
-export default AddAncillaryServices;
+export default InFlightShopping;

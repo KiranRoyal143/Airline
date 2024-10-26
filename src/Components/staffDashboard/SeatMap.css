@@ -1,0 +1,132 @@
+/* General seat container styling */
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Ensure rows of seats are aligned properly */
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Checked-in seat */
+.seat.checked-in {
+  background-color: green;
+}
+
+/* Special meal seat */
+.seat.special-meal {
+  border: 2px solid orange;
+}
+
+/* Wheelchair indicator using ::before */
+.seat.wheelchair::before {
+  content: "W";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: blue;
+  color: white;
+  font-size: 10px;
+  padding: 2px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* Infant indicator using ::after */
+.seat.infant::after {
+  content: "I";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #c35757;
+  color: white;
+  font-size: 10px;
+  padding: 2px;
+  border-radius: 50%;
+  z-index: 3; /* Higher z-index to ensure it appears above other elements */
+}
+
+/* Empty seat */
+.seat.empty-space {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  border: none;
+  pointer-events: none;
+}
+
+/* Static seat legends */
+.seat-static {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px; 
+  margin: 5px;
+  border: 1px solid #ccc;
+  position: relative;
+}
+
+.seat-static.checked-in {
+  background-color: green;
+}
+.seat-static-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; /* Space the seat items out evenly */
+  align-items: center;
+  margin: 20px 0;
+}
+
+.seat-static.special-meal {
+  border: 2px solid orange;
+}
+
+.seat-static.wheelchair::after {
+  content: "W";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: blue;
+  color: white;
+  font-size: 5px;
+  padding: 2px;
+  border-radius: 50%;
+}
+
+.seat-static.infant::after {
+  content: "I";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #c35757;
+  color: white;
+  font-size: 5px;
+  padding: 2px;
+  border-radius: 50%;
+}
+.seat.empty-seat {
+  background-color: lightgray;
+  border: 1px dashed #999;
+}
+.seat-static.empty-seat {
+  background-color: lightgray;
+  border: 1px dashed #999;
+}

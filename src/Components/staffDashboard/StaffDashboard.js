@@ -1,81 +1,98 @@
-import React, { useState, useEffect } from "react";
-import FlightList from "../FlightList";
-import CheckIn from "../CheckIn";
-import InFlightManagement from "../InFlightManagement";
-import { fetchFlights } from "../../store/actions/flightsActions";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList, faAngleDoubleLeft } from "@fortawesome/free-solid-svg-icons";
+import FlightList from "../FlightList";
+import StaffNavigation from "./StaffNavigation";
 import "./StaffDashboard.css";
+import {
+  fetchFlights,
+  updatePassengerCheckIn,
+  undoPassengerCheckIn,
+  changePassengerSeat,
+  updateAncillaryServices,
+  updateSpecialMeals,
+  addInFlightShopRequest,
+} from "../../store/actions/flightsActions";
 
-function StaffDashboard() {
-  const [selectedFlight, setSelectedFlight] = useState(null);
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(true);
-
+const StaffDashboard = () => {
+  const [selectedFlight, setSelectedFlight] = React.useState(null);
   const flights = useSelector((state) => state.flights.flights);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch flights when the component mounts
     dispatch(fetchFlights());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (selectedFlight) {
+      const updatedFlight = flights.find(
+        (flight) => flight.id === selectedFlight.id
+      );
+      setSelectedFlight(updatedFlight);
+    }
+  }, [flights, selectedFlight]);
 
   const handleSelectFlight = (flight) => {
     setSelectedFlight(flight);
   };
 
-  const handleCheckIn = () => {
-    setSelectedTask("checkIn");
+  const handlePassengerCheckIn = (passengerId) => {
+    dispatch(updatePassengerCheckIn(selectedFlight.id, passengerId));
   };
 
-  const handleInFlight = () => {
-    setSelectedTask("inFlight");
+  const handleUndoPassengerCheckIn = (passengerId) => {
+    dispatch(undoPassengerCheckIn(selectedFlight.id, passengerId));
   };
 
-  const toggleSidebar = () => {
-    setIsExpanded(!isExpanded);
+  const handlePassengerSeatChange = (passengerId, newSeat) => {
+    dispatch(changePassengerSeat(selectedFlight.id, passengerId, newSeat));
+  };
+
+  const handleAncillaryService = (
+    flightId,
+    passengerId,
+    newAncillaryServices
+  ) => {
+    dispatch(
+      updateAncillaryServices(flightId, Number(passengerId), newAncillaryServices)
+    );
+  };
+
+  const handleMealPreferenceChange = (passengerId, mealPreference) => {
+    dispatch(
+      updateSpecialMeals(selectedFlight.id, passengerId, mealPreference)
+    );
+  };
+
+  const handleInFlightShopRequest = (passengerId, shopRequest) => {
+    dispatch(
+      addInFlightShopRequest(selectedFlight.id, passengerId, shopRequest)
+    );
   };
 
   return (
-    <div className="staff-dashboard">
-      <div className="staffPage_SelectFlight">
-        {selectedTask === null && selectedFlight === null && (
+    <div>
+      {!selectedFlight ? (
+        <div className="staffPage_SelectFlight">
           <div>
             <h2>Select a Flight</h2>
             <FlightList flights={flights} onSelectFlight={handleSelectFlight} />
           </div>
-        )}
-      </div>
-      {selectedFlight && (
-        <div className={`sidebar ${isExpanded ? "expanded" : "collapsed"}`}>
-          <div className="toggle-button" onClick={toggleSidebar}>
-            {isExpanded ? (
-              <FontAwesomeIcon icon={faAngleDoubleLeft} />
-            ) : (
-              <FontAwesomeIcon icon={faList} />
-            )}
-          </div>
-          {isExpanded && (
-            <div>
-              <h3>Select A Task</h3>
-              <button onClick={handleCheckIn}>Check-In</button>
-              <button onClick={handleInFlight}>In-Flight Management</button>
-            </div>
-          )}
+        </div>
+      ) : (
+        <div>
+          <StaffNavigation
+            selectedFlight={selectedFlight}
+            updatePassengerCheckIn={handlePassengerCheckIn}
+            undoPassengerCheckIn={handleUndoPassengerCheckIn}
+            changePassengerSeat={handlePassengerSeatChange}
+            addAncillaryService={handleAncillaryService}
+            changeMealPreference={handleMealPreferenceChange}
+            addInFlightShopRequest={handleInFlightShopRequest}
+          />
         </div>
       )}
-      <div className="staff-option-content">
-        {selectedTask === "checkIn" && selectedFlight && (
-          <CheckIn selectedFlight={selectedFlight} />
-        )}
-
-        {selectedTask === "inFlight" && selectedFlight && (
-          <InFlightManagement selectedFlight={selectedFlight} />
-        )}
-      </div>
     </div>
   );
-}
+};
 
 export default StaffDashboard;

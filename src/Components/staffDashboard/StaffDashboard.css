@@ -1,7 +1,22 @@
 .staff-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  top: 150px; /* Consistent with admin dashboard */
   margin: auto;
-  padding-top: 150px;
 }
+
+.staffPage_SelectFlight {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .sidebar {
   position: fixed;
   top: 150px;
@@ -11,6 +26,7 @@
   padding-top: 20px;
   transition: width 0.3s;
   display: flex;
+  flex-direction: column;
 }
 
 .collapsed {
@@ -52,27 +68,24 @@
 }
 
 .main-content {
-  margin-left: 220px; /* Adjust this value according to your sidebar width */
+  margin-left: 220px; /* Adjust according to sidebar width */
   padding: 20px;
-  /* Add any other styles you need */
 }
 
 .staff-option-content {
-  top: 150px;
   display: flex;
-  /* padding-left: 240px; */
   flex-grow: 1;
   flex-flow: column;
 }
-.staffPage_SelectFlight {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 150px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+
 .in-flight {
-  margin-left: -260px;
+  margin-left: 220px; /* Consistent with sidebar positioning */
+}
+
+.staff-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  top: 150px;
 }

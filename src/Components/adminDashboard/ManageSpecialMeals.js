@@ -56,7 +56,7 @@ const ManageSpecialMeals = ({
             </span>
           </p>
           <select
-            className="texts"
+            className="select-dropdown"
             value={newSpecialMeals}
             onChange={(e) => setNewSpecialMeals(e.target.value)}
           >
@@ -78,7 +78,7 @@ const ManageSpecialMeals = ({
             <strong>Select Meals to Delete:</strong>
           </p>
           <select
-            className="texts"
+            className="select-dropdown"
             value={selectedMeal}
             onChange={(e) => setSelectedMeal(e.target.value)}
           >

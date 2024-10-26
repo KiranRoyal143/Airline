@@ -1,0 +1,56 @@
+.add-passenger {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.add-passenger h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-passenger form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-passenger form > div {
+  margin-bottom: 15px;
+}
+
+.add-passenger label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.add-passenger input[type="text"],
+.add-passenger input[type="date"],
+.add-passenger select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.add-passenger input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.add-passenger button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-passenger button:hover {
+  background-color: #0056b3;
+}

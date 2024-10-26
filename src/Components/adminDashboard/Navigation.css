@@ -47,9 +47,8 @@
 }
 
 .main-content {
-  margin-left: 220px; /* Adjust this value according to your sidebar width */
+  margin-left: 220px;
   padding: 20px;
-  /* Add any other styles you need */
 }
 
 .option-content {
@@ -79,22 +78,28 @@
   flex-direction: column;
   justify-content: flex-start;
   position: relative;
-  top: 200px; /* Adjust this value as needed */
+  top: 200px;
 }
 
 .texts {
   margin-left: 10px;
   margin-right: 10px;
-  height: 22px;
+  height: 28px;
   margin-top: 14px;
 }
+
 .psname {
   width: 400px;
   text-align: justify;
 }
 button {
-  height: 28px;
+  height: 33px;
   margin-top: 14px;
+}
+.select-dropdown {
+  height: 33px;
+  margin: 14px;
+  margin-left: 0px;
 }
 
 .passenger-content {

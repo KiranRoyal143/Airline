@@ -1,5 +1,3 @@
-// actions/flightsActions.js
-
 // Action types
 export const FETCH_FLIGHTS_SUCCESS = "FETCH_FLIGHTS_SUCCESS";
 export const FETCH_FLIGHTS_FAILURE = "FETCH_FLIGHTS_FAILURE";
@@ -91,7 +89,6 @@ export const addPassenger = (flightId, passenger) => {
   };
 };
 
-
 export const fetchFlights = () => {
   return async (dispatch) => {
     try {
@@ -118,7 +115,7 @@ export const deletePassenger = (flightId, passengerId) => {
         throw new Error("Failed to fetch flight data");
       }
       const flight = await response.json();
-  
+
       // Remove passengers that have an equal id to passengerId
       const updatedPassengers = flight.passengers.filter(
         (p) => p.id.toString() !== passengerId
@@ -155,51 +152,59 @@ export const deletePassenger = (flightId, passengerId) => {
     }
   };
 };
-
-export const updatePassengerCheckIn = (flightId, passengerId) => {
-  return async (dispatch, getState) => {
-    try {
-      const { flights } = getState();
-      const flightIndex = flights.flights.findIndex(
-        (flight) => flight.id === flightId
-      );
-      if (flightIndex === -1) {
-        throw new Error("Flight not found.");
-      }
-
-      const passengerIndex = flights.flights[flightIndex].passengers.findIndex(
-        (passenger) => passenger.id === passengerId
-      );
-      if (passengerIndex === -1) {
-        throw new Error("Passenger not found.");
-      }
-
-      const updatedFlight = { ...flights.flights[flightIndex] };
-      const updatedPassenger = { ...updatedFlight.passengers[passengerIndex] };
-
-      updatedPassenger.isCheckedIn = true;
-
-      updatedFlight.passengers[passengerIndex] = updatedPassenger;
-
-      await fetch("http://localhost:3000/flights/" + flightId, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedFlight),
-      });
-
-      dispatch({
-        type: UPDATE_FLIGHT,
-        payload: updatedFlight,
-      });
-    } catch (error) {
-      console.error("Error updating passenger check-in:", error);
+export const updatePassengerCheckIn = (flightId, passengerNumber) => {
+  const passengerId = Number(passengerNumber);
+  return (dispatch, getState) => {
+    const { flights } = getState();
+    const flightIndex = flights.flights.findIndex(
+      (flight) => flight.id === flightId
+    );
+    if (flightIndex === -1) {
+      throw new Error("Flight not found.");
     }
+    const passengerIndex = flights.flights[flightIndex].passengers.findIndex(
+      (passenger) => passenger.id === passengerId
+    );
+
+    if (passengerIndex === -1) {
+      throw new Error("Passenger not found.");
+    }
+    const updatedFlight = { ...flights.flights[flightIndex] };
+    const updatedPassenger = { ...updatedFlight.passengers[passengerIndex] };
+
+    updatedPassenger.isCheckedIn = true;
+
+    updatedFlight.passengers[passengerIndex] = updatedPassenger;
+
+    return fetch(`http://localhost:3000/flights/${flightId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedFlight),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update flight data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Dispatching UPDATE_FLIGHT with payload:", updatedFlight);
+        dispatch({
+          type: "UPDATE_FLIGHT",
+          payload: updatedFlight,
+        });
+      })
+      .catch((error) => {
+        console.error("Error updating passenger check-in:", error);
+      });
   };
 };
 
-export const undoPassengerCheckIn = (flightId, passengerId) => {
+
+export const undoPassengerCheckIn = (flightId, passengerNumber) => {
+  const passengerId = Number(passengerNumber);
   return async (dispatch, getState) => {
     try {
       const { flights } = getState();
@@ -564,7 +569,6 @@ export const updatePassengerName = (flightId, passengerId, newName) => {
   };
 };
 
-
 export const updatePassportDetails = (
   flightId,
   passengerId,
@@ -825,7 +829,7 @@ export const updateShoppingItems = (
 ) => {
   return async (dispatch) => {
     try {
-      console.log(flightId,passengerId,updatedShoppingItem);
+      console.log(flightId, passengerId, updatedShoppingItem);
       // Fetch the flight data
       const response = await fetch(`http://localhost:3000/flights/${flightId}`);
       if (!response.ok) {
