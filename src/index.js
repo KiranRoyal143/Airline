@@ -14,7 +14,7 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 ReactDOM.render(
   <Provider store={store}>
     <div className="app-scr">
-      <App/>
+      <App />
     </div>
   </Provider>,
   document.getElementById("root")
