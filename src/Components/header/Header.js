@@ -1,8 +1,18 @@
+// Header.js
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./Header.css";
 
-function Header() {
+const Header = () => {
+  const { currentUser, userRole, loginWithGoogle, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
+
   return (
     <nav className="header-container">
       <div className="header-brand">
@@ -23,10 +33,24 @@ function Header() {
           <li>
             <Link to="/admin">Admin Dashboard</Link>
           </li>
+          {currentUser ? (
+            <>
+              <li>
+                {currentUser.displayName} ({userRole})
+              </li>
+              <li>
+                <button onClick={handleLogout}>Logout</button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <button onClick={loginWithGoogle}>Login</button>
+            </li>
+          )}
         </ul>
       </div>
     </nav>
   );
-}
+};
 
 export default Header;
